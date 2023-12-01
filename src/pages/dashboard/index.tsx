@@ -2,7 +2,8 @@ import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { FiPlus, FiSearch } from "react-icons/fi";
+import { useRouter } from "next/router";
+import { FiEye, FiPlus, FiSearch } from "react-icons/fi";
 import { db } from "~/server/mongo";
 import { Group, User } from "~/types";
 
@@ -17,6 +18,8 @@ type Props = {
 };
 
 export default function Dashboard({ user, groups, notifications }: Props) {
+  const router = useRouter();
+
   return (
     <>
       <header className="px-8 md:px-12 lg:px-16 2xl:px-32 flex justify-between items-center py-5 lg:py-6">
@@ -49,7 +52,68 @@ export default function Dashboard({ user, groups, notifications }: Props) {
               </ul>
             </div>
             {groups.length >= 1 ? (
-              <ul></ul>
+              <ul className="grid grid-col-1 md:grid-cols-2 gap-5 lg:gap-8">
+                {groups.map((group, idx) => (
+                  <div
+                    onClick={() => {
+                      router.push(
+                        {
+                          pathname: `/groups/${group._id}`,
+                          query: { _id: group._id as string },
+                        },
+                        `/groups/${group._id}`
+                      );
+                    }}
+                    key={idx}
+                    className="w-full grid grid-cols-12 gap-3.5 lg:gap-5 border  rounded lg:hover:border-neutral-600 px-5 py-3.5 transition-all duration-[0.35s] ease-in-out cursor-pointer group"
+                  >
+                    <div className="col-span-9">
+                      <h4 className="font-medium text-lg lg:text-xl">
+                        {group.data.name}
+                      </h4>
+                      <p className="text-neutral-600 font-light truncate">
+                        {group.data.description}
+                      </p>
+                    </div>
+                    <div className="col-span-3 flex justify-end items-center">
+                      <Link
+                        href={{
+                          pathname: `/groups/${group._id}`,
+                          query: { _id: group._id as string },
+                        }}
+                        as={`/groups/${group._id}`}
+                        className="w-[37.5px] h-[37.5px] rounded border bg-neutral-100 flex justify-center items-center lg:group-hover:border-neutral-900/25 text-neutral-600 lg:group-hover:text-neutral-900 lg:group-hover:bg-white lg:group-hover:hover:border-neutral-900"
+                      >
+                        <FiEye />
+                      </Link>
+                    </div>
+                    {group.data.user_responsible === user._id && (
+                      <div className="col-span-12 flex items-center gap-x-2.5">
+                        <Link
+                          href={{
+                            pathname: `/groups/${group._id}/edit`,
+                            query: { _id: group._id as string },
+                          }}
+                          as={`/groups/${group._id}/edit`}
+                          className="font-medium lg:text-blue-400 lg:group-hover:text-blue-500 text-blue-500 lg:group-hover:hover:text-blue-300"
+                        >
+                          Edit
+                        </Link>
+                        <Link
+                          href={{
+                            pathname: `/groups/${group._id}/delete`,
+                            query: { _id: group._id as string },
+                          }}
+                          as={`/groups/${group._id}/delete`}
+                          className="font-medium lg:text-red-400 lg:group-hover:text-red-500 text-red-500 lg:group-hover:hover:text-red-300"
+                        >
+                          Delete
+                        </Link>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </ul>
             ) : (
               <p className="p-6 lg:p-8 rounded border bg-neutral-100 text-neutral-600 text-center">
                 You do not have a group yet.

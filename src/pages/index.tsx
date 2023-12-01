@@ -36,7 +36,7 @@ export default function Home({ user }: Props) {
 
   return (
     <>
-      <header className="w-full fixed top-50 z-40 flex justify-end pr-8 md:pr-12 lg:pr-16 2xl:pr-32 py-5 lg:py-6">
+      <header className="w-full fixed top-50 z-40 flex justify-end pr-8 md:pr-12 lg:pr-16 2xl:pr-32 py-4 lg:py-5">
         <nav className="flex items-center gap-x-3.5 lg:gap-x-5">
           <div className="bg-neutral-100 rounded overflow-hidden flex items-center">
             <button
@@ -67,7 +67,7 @@ export default function Home({ user }: Props) {
           </Link>
         </nav>
       </header>
-      <div className="h-screen flex flex-col justify-center items-center px-8 md:px-12 lg:px-32">
+      <div className="h-screen flex flex-col justify-center items-center px-8 md:px-12 lg:px-16 2xl:px-32">
         <article className="flex flex-col gap-y-1.5 lg:gap-y-2.5 items-center text-center pb-5 lg:pb-8 border-b mb-5 lg:mb-8 w-full">
           <h1 className="font-medium text-4xl lg:text-5xl 2xl:text-6xl">
             Gidoto

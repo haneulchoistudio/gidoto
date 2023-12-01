@@ -1,0 +1,16 @@
+import { ObjectId } from "mongodb";
+import { GetServerSideProps } from "next";
+import { getSession } from "next-auth/react";
+import { User } from "~/types";
+
+export default function GroupDetailPrayerCreate() {
+  return <></>;
+}
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  if (!ObjectId.isValid(ctx.query._id as string)) {
+    return { redirect: { destination: "/groups/not-found", permanent: false } };
+  }
+  const user = (await getSession(ctx)) as unknown as User;
+  return { props: { user } };
+};

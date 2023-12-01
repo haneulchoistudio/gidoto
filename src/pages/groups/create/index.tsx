@@ -80,7 +80,7 @@ export default function GroupsCreate({ user }: Props) {
     <Loading message="Creating the group..." fullScreen />
   ) : (
     <>
-      <header className="px-8 md:px-12 lg:px-16 2xl:px-32 flex justify-between items-center py-5 lg:py-6">
+      <header className="px-8 md:px-12 lg:px-16 2xl:px-32 flex justify-between items-center py-4 lg:py-5">
         <div className="flex items-center gap-x-2.5">
           <Link
             href={"/dashboard"}

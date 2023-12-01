@@ -14,7 +14,7 @@ const ProfileButton: React.FC<ProfileButtonProps> = ({
   const [openMenu, setOpenMenu] = useState<boolean>(false);
 
   return (
-    <div className="relative z-20">
+    <div className="relative z-20 flex items-center">
       <button type="button" onClick={() => setOpenMenu(!openMenu)}>
         <Profile image={image} asModal={openMenu} />
       </button>
