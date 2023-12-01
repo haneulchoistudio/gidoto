@@ -55,8 +55,8 @@ export default function Dashboard({ user, groups, notifications }: Props) {
               <ul className="grid grid-col-1 md:grid-cols-2 gap-5 lg:gap-8">
                 {groups.map((group, idx) => (
                   <div
-                    onClick={() => {
-                      router.push(
+                    onClick={async () => {
+                      await router.push(
                         {
                           pathname: `/groups/${group._id}`,
                           query: { _id: group._id as string },
@@ -89,26 +89,38 @@ export default function Dashboard({ user, groups, notifications }: Props) {
                     </div>
                     {group.data.user_responsible === user._id && (
                       <div className="col-span-12 flex items-center gap-x-2.5">
-                        <Link
-                          href={{
-                            pathname: `/groups/${group._id}/edit`,
-                            query: { _id: group._id as string },
+                        <button
+                          type="button"
+                          onClick={async (e) => {
+                            e.stopPropagation();
+                            await router.push(
+                              {
+                                pathname: `/groups/${group._id}/edit`,
+                                query: { _id: group._id as string },
+                              },
+                              `/groups/${group._id}/edit`
+                            );
                           }}
-                          as={`/groups/${group._id}/edit`}
                           className="font-medium lg:text-blue-400 lg:group-hover:text-blue-500 text-blue-500 lg:group-hover:hover:text-blue-300"
                         >
                           Edit
-                        </Link>
-                        <Link
-                          href={{
-                            pathname: `/groups/${group._id}/delete`,
-                            query: { _id: group._id as string },
+                        </button>
+                        <button
+                          type="button"
+                          onClick={async (e) => {
+                            e.stopPropagation();
+                            await router.push(
+                              {
+                                pathname: `/groups/${group._id}/delete`,
+                                query: { _id: group._id as string },
+                              },
+                              `/groups/${group._id}/delete`
+                            );
                           }}
-                          as={`/groups/${group._id}/delete`}
                           className="font-medium lg:text-red-400 lg:group-hover:text-red-500 text-red-500 lg:group-hover:hover:text-red-300"
                         >
                           Delete
-                        </Link>
+                        </button>
                       </div>
                     )}
                   </div>

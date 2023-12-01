@@ -44,8 +44,13 @@ export default function GroupsCreate({ user }: Props) {
     setLoading(true);
 
     if (![g.name.trim(), g.description.trim()].every(Boolean)) {
-      console.log(g);
       setError("Your must fill in your group name and description fields.");
+      setLoading(false);
+      return;
+    }
+
+    if (![g.contact.email.trim(), g.contact.email.trim()].every(Boolean)) {
+      setError("Your must fill in your group leader's name and email fields.");
       setLoading(false);
       return;
     }
