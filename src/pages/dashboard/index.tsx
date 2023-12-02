@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { FiEye, FiPlus, FiSearch } from "react-icons/fi";
 import { db } from "~/server/mongo";
-import { Group, User } from "~/types";
+import { Group, GroupProps, User } from "~/types";
 
 const ProfileButton = dynamic(() =>
   import("~/components/user").then((component) => component.ProfileButton)
@@ -14,7 +14,11 @@ const ProfileButton = dynamic(() =>
 type Props = {
   user: User;
   groups: Group[];
-  notifications: any[];
+  notifications: {
+    _id: string;
+    name: string;
+    theme: GroupProps["theme"];
+  }[];
 };
 
 export default function Dashboard({ user, groups, notifications }: Props) {
@@ -137,7 +141,30 @@ export default function Dashboard({ user, groups, notifications }: Props) {
           <article className="flex flex-col gap-y-4 lg:gap-y-5">
             <h2 className="font-medium text-xl lg:text-2xl">Notifications</h2>
             {notifications.length >= 1 ? (
-              <ul></ul>
+              <ul className="flex flex-col w-full">
+                {notifications.map((each, idx) => (
+                  <div
+                    key={idx}
+                    className="py-2.5 lg:hover:px-3.5 border border-transparent lg:hover:border-neutral-600/25 rounded transition-all duration-[0.35s] ease-in-out cursor-pointer"
+                  >
+                    <p className="tex-sm lg:text-base text-neutral-600">
+                      {each.name}&apos;s member invites you to join.
+                    </p>
+                    <ul className="flex items-center">
+                      <Link
+                        href={{
+                          pathname: `/groups/${each._id}`,
+                          query: { _id: each._id },
+                        }}
+                        as={`/groups/${each._id}`}
+                        className="underline text-blue-500 text-sm lg:text-base font-medium lg:no-underline lg:hover:underline lg:hover:text-blue-400"
+                      >
+                        View
+                      </Link>
+                    </ul>
+                  </div>
+                ))}
+              </ul>
             ) : (
               <p className="p-6 lg:p-8 rounded border bg-neutral-100 text-neutral-600 text-center">
                 You do not have a notificiation.
@@ -158,9 +185,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   }
 
   let groups: Group[] = [];
+  const groupDocs = await db("groups");
 
   if (user.data.groups.length >= 1) {
-    const groupDocs = await db("groups");
     groups = await Promise.all(
       user.data.groups.map(async (group) => {
         return (await groupDocs.findOne({ _id: group })) as Group;
@@ -169,6 +196,16 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   }
 
   let notifications: any[] = [];
+
+  notifications = await groupDocs
+    .find({ "data.emails": user.data.email })
+    .toArray();
+
+  notifications = notifications.map((each) => ({
+    _id: each._id,
+    name: each.data.name,
+    theme: each.data.theme,
+  }));
 
   return {
     props: { user, groups, notifications },

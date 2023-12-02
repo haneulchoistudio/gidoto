@@ -24,7 +24,7 @@ const nextAuthOptions: NextAuthOptions = {
   secret: abc("NEXTAUTH_SECRET"),
   callbacks: {
     async redirect({ baseUrl, url }) {
-      return url;
+      return baseUrl;
     },
     async jwt({ token, account, user }) {
       if (account) {
