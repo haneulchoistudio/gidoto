@@ -1,11 +1,13 @@
-import { GetServerSideProps } from "next";
-import { getSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import { GetServerSideProps } from "next";
+import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { HiArrowLeft } from "react-icons/hi";
 import { twMerge } from "tailwind-merge";
+import { returns } from "~/server/ssr";
+import { len } from "~/server/utils";
 import type { GroupProps, User } from "~/types";
 
 const ProfileButton = dynamic(() =>
@@ -336,6 +338,10 @@ export default function GroupsCreate({ user }: Props) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { props, redirects } = returns();
   const user = (await getSession(ctx)) as unknown as User;
-  return { props: { user } };
+  if (!user) return redirects("/", false);
+  if (len(user.data.groups).eq(3))
+    return redirects("/groups/create/limit", false);
+  return props({ user });
 };

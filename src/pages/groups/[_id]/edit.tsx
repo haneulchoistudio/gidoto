@@ -1,14 +1,15 @@
-import { ObjectId } from "mongodb";
-import { GetServerSideProps } from "next";
-import { getSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import { GetServerSideProps } from "next";
+import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { FiCheck } from "react-icons/fi";
 import { HiArrowLeft } from "react-icons/hi";
 import { twMerge } from "tailwind-merge";
 import { db } from "~/server/mongo";
+import { validateDbQueryId } from "~/server/utils";
+import { returns } from "~/server/ssr";
 import type { Group, GroupProps, User } from "~/types";
 
 const ProfileButton = dynamic(() =>
@@ -87,6 +88,7 @@ export default function GroupDetailEdit({ user, group }: Props) {
       o.theme !== n.theme,
     ].some(Boolean);
     setDiff(different);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [n]);
 
   return loading ? (
@@ -360,11 +362,16 @@ export default function GroupDetailEdit({ user, group }: Props) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  if (!ObjectId.isValid(ctx.query._id as string)) {
-    return { redirect: { destination: "/groups/not-found", permanent: false } };
-  }
+  const { _id, v } = validateDbQueryId(ctx, "_id");
+  const { props, redirects } = returns();
+  if (!v)
+    return redirects(
+      _id ? `/groups/not-found?_id=${_id}` : "/groups/not-found",
+      false
+    );
   const user = (await getSession(ctx)) as unknown as User;
+  if (!user) return redirects("/", false);
   const groupDocs = await db("groups");
-  const group = (await groupDocs.findOne({ _id: ctx.query._id })) as Group;
-  return { props: { user, group } };
+  const group = (await groupDocs.findOne({ _id })) as Group;
+  return props({ user, group });
 };

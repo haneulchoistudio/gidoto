@@ -1,6 +1,7 @@
-import { ObjectId } from "mongodb";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
+import { returns } from "~/server/ssr";
+import { validateDbQueryId } from "~/server/utils";
 import type { User } from "~/types";
 
 type Props = {
@@ -12,19 +13,19 @@ export default function GroupDetailPrayerDetailDelete({ user }: Props) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  if (!ObjectId.isValid(ctx.query._id as string)) {
-    return { redirect: { destination: "/groups/not-found", permanent: false } };
-  }
-  if (!ObjectId.isValid(ctx.query._id_prayer as string)) {
-    return {
-      redirect: {
-        destination: `/groups/${ctx.query._id}/prayers/not-found`,
-        permanent: false,
-      },
-    };
-  }
-  //   console.log(ctx.query, ctx.params);
-  // { _id: '65698d314b2960b0a501bb42', _id_prayer: '32132131' } { _id: '65698d314b2960b0a501bb42', _id_prayer: '32132131' }
+  const { props, redirects } = returns();
+  const { _id, v: v_id } = validateDbQueryId(ctx, "_id");
+  const { _id_prayer, v: v_id_prayer } = validateDbQueryId(ctx, "_id_prayer");
+  if (!v_id)
+    return redirects(_id ? `/groups/${_id}` : `/groups/not-found`, false);
+  if (!v_id_prayer)
+    return redirects(
+      _id_prayer
+        ? `/groups/${_id}/prayers/not-found?_id_prayer=${_id_prayer}`
+        : `/groups/${_id}/prayers/not-found`,
+      false
+    );
   const user = (await getSession(ctx)) as unknown as User;
-  return { props: { user } };
+  if (!user) return redirects("/", false);
+  return props({ user });
 };

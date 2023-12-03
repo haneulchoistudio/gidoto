@@ -1,24 +1,15 @@
-import { ObjectId } from "mongodb";
 import { GetServerSideProps } from "next";
-import { getSession } from "next-auth/react";
-import type { User } from "~/types";
+import { returns } from "~/server/ssr";
+import { getPwQ, validateDbQueryId } from "~/server/utils";
 
 export default function GroupDetailPrayers() {
-  return <></>;
+  return null;
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  if (!ObjectId.isValid(ctx.query._id as string)) {
-    return { redirect: { destination: "/groups/not-found", permanent: false } };
-  }
-
-  const user = (await getSession(ctx)) as unknown as User;
-
-  if (!user) {
-    return { redirect: { destination: "/", permanent: false } };
-  }
-
-  return {
-    redirect: { destination: `/groups/${ctx.query._id}`, permanent: false },
-  };
+  const { redirects } = returns();
+  const { _id, v } = validateDbQueryId(ctx, "_id");
+  if (!v) return redirects(_id ? `/groups/${_id}` : `/groups/not-found`, false);
+  const { pathname } = getPwQ("groups", _id, ["_id"]);
+  return redirects(pathname, false);
 };

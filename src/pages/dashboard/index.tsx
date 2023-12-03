@@ -1,10 +1,12 @@
-import { GetServerSideProps } from "next";
-import { getSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import { GetServerSideProps } from "next";
+import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { FiEye, FiPlus, FiSearch } from "react-icons/fi";
 import { db } from "~/server/mongo";
+import { returns } from "~/server/ssr";
+import { len } from "~/server/utils";
 import { Group, GroupProps, User } from "~/types";
 
 const ProfileButton = dynamic(() =>
@@ -179,35 +181,27 @@ export default function Dashboard({ user, groups, notifications }: Props) {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const user = (await getSession(ctx)) as unknown as User;
-
-  if (!user) {
-    return { redirect: { destination: "/", permanent: false } };
-  }
-
+  const { props, redirects } = returns();
+  if (!user) return redirects("/", false);
   let groups: Group[] = [];
   const groupDocs = await db("groups");
-
-  if (user.data.groups.length >= 1) {
+  if (len(user.data.groups).geq(1)) {
     groups = await Promise.all(
       user.data.groups.map(async (group) => {
         return (await groupDocs.findOne({ _id: group })) as Group;
       })
     );
   }
-
   let notifications: any[] = [];
-
   notifications = await groupDocs
     .find({ "data.emails": user.data.email })
     .toArray();
-
-  notifications = notifications.map((each) => ({
-    _id: each._id,
-    name: each.data.name,
-    theme: each.data.theme,
-  }));
-
-  return {
-    props: { user, groups, notifications },
-  };
+  if (len(notifications).geq(1)) {
+    notifications = notifications.map((each) => ({
+      _id: each._id,
+      name: each.data.name,
+      theme: each.data.theme,
+    }));
+  }
+  return props({ user, groups, notifications });
 };

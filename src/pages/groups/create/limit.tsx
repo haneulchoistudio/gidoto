@@ -16,8 +16,3 @@ export default function GroupsCreateLimit() {
     />
   );
 }
-
-// export const getServerSideProps: GetServerSideProps = async (ctx) => {
-//   const user = (await getSession(ctx)) as unknown as User;
-//   return { props: { user } };
-// };

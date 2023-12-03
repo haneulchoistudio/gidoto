@@ -1,13 +1,14 @@
+import dynamic from "next/dynamic";
+import Link from "next/link";
 import { GetServerSideProps } from "next";
 import { getSession, signIn } from "next-auth/react";
-import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { User } from "~/types";
 import { FaGoogle } from "react-icons/fa";
 import { SiKakaotalk } from "react-icons/si";
 import { HiArrowLeft } from "react-icons/hi";
-import Link from "next/link";
+import { returns } from "~/server/ssr";
 
 const Loading = dynamic(() =>
   import("~/components/status").then((component) => component.Loading)
@@ -28,6 +29,7 @@ export default function Home({ user }: Props) {
 
       return () => clearTimeout(timer);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   if (user) {
@@ -98,11 +100,10 @@ export default function Home({ user }: Props) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { props } = returns();
   const user = (await getSession(ctx)) as unknown as User;
-
   const message = user
     ? `Welcome to Gidoto, ${user.data.name}.`
     : `Please sign in.`;
-
-  return { props: { user, message } };
+  return props({ user, message });
 };

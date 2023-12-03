@@ -1,6 +1,7 @@
-import { ObjectId } from "mongodb";
-import { GetServerSideProps } from "next";
 import dynamic from "next/dynamic";
+import { GetServerSideProps } from "next";
+import { returns } from "~/server/ssr";
+import { validateDbQueryId } from "~/server/utils";
 
 const AccessErrorScreen = dynamic(() =>
   import("~/components/status").then((component) => component.AccessErrorScreen)
@@ -22,9 +23,12 @@ export default function PrayersCreateLimit({ _id }: Props) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  if (!ObjectId.isValid(ctx.query._id as string)) {
-    return { redirect: { destination: "/groups/not-found", permanent: false } };
-  }
-
-  return { props: { _id: ctx.query._id } };
+  const { props, redirects } = returns();
+  const { _id, v } = validateDbQueryId(ctx, "_id");
+  if (!v)
+    return redirects(
+      _id ? "/groups/not-found" : `/groups/not-found?_id=${_id}`,
+      false
+    );
+  return props({ _id });
 };

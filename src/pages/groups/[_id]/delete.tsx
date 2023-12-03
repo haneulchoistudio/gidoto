@@ -1,10 +1,11 @@
-import { ObjectId } from "mongodb";
+import dynamic from "next/dynamic";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
-import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { db } from "~/server/mongo";
+import { returns } from "~/server/ssr";
+import { validateDbQueryId } from "~/server/utils";
 import type { Group, User } from "~/types";
 
 const BinaryActionScreen = dynamic(() =>
@@ -99,16 +100,19 @@ export default function GroupDetailDelete({ user, group }: Props) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  if (!ObjectId.isValid(ctx.query._id as string)) {
-    return { redirect: { destination: "/groups/not-found", permanent: false } };
-  }
+  const { props, redirects } = returns();
+  const { _id, v } = validateDbQueryId(ctx, "_id");
+  if (!v)
+    return redirects(
+      _id ? `/groups/not-found?_id=${_id}` : "/groups/not-found",
+      false
+    );
   const user = (await getSession(ctx)) as unknown as User;
-
+  if (!user) return redirects("/", false);
   if (user.data.groups.find((each) => each === ctx.query._id)) {
     const groupDocs = await db("groups");
-    const group = (await groupDocs.findOne({ _id: ctx.query._id })) as Group;
-    return { props: { user, group } };
+    const group = (await groupDocs.findOne({ _id })) as Group;
+    return props({ user, group });
   }
-
-  return { redirect: { destination: "/groups/not-found", permanent: false } };
+  return redirects("/groups/not-found", false);
 };
