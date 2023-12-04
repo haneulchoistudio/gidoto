@@ -203,10 +203,10 @@ export default function GroupsCreate({ user }: Props) {
             </h4>
             <textarea
               value={g.description}
+              rows={4}
               onChange={(e) =>
                 setG((g) => ({ ...g, description: e.target.value }))
               }
-              rows={4}
               className="px-4 py-3 rounded text-neutral-600 focus:text-neutral-900 placeholder:text-neutral-400 "
               placeholder="We are the young adult team at Example church. We gather online at Gidoto to pray for one another if anyone needs prayers until it is fulfilled by God."
             />

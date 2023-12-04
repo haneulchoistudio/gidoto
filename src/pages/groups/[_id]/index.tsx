@@ -36,6 +36,11 @@ const GroupDetailInvitation = dynamic(() =>
     (component) => component.GroupDetailInvitation
   )
 );
+const GroupDetailContactLeader = dynamic(() =>
+  import("~/components/detail").then(
+    (component) => component.GroupDetailContactLeader
+  )
+);
 
 type Props = {
   user: User;
@@ -44,16 +49,10 @@ type Props = {
   prayers: Prayer[];
 };
 
-export default function GroupDetail({
-  user,
-  group,
-  members,
-  prayers: PRAYERS,
-}: Props) {
+export default function GroupDetail({ user, group, members, prayers }: Props) {
   const [theme, _theme] = useState<(typeof group)["data"]["theme"]>(
     group.data.theme
   );
-  const [prayers, _prayers] = useState<(typeof PRAYERS)[number][]>([]);
 
   function ifMember(): boolean {
     function _ifJustMember() {
@@ -108,9 +107,10 @@ export default function GroupDetail({
                       "https://instagram.com",
                       group.data.accounts.instagram,
                     ].join("/")
-                  : "ds"
+                  : ""
               }
             />
+            <GroupDetailContactLeader {...group.data.contact} />
           </article>
         </div>
       )}

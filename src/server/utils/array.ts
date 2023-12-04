@@ -1,7 +1,9 @@
-function __len__<T>(a: Array<T>) {
-  const length = a.length;
+type Compute = (N: number) => boolean;
+type ComputeEquality<K extends string> = Record<K, Compute>;
 
-  return {
+function __len__<T = unknown>(a: Array<T>) {
+  const length = a.length;
+  const lenFunctions = {
     eq: (N: number) => {
       return length === N;
     },
@@ -17,7 +19,9 @@ function __len__<T>(a: Array<T>) {
     leq: (N: number) => {
       return [length === N, length < N].some(Boolean);
     },
-  };
+  } as const;
+
+  return lenFunctions as ComputeEquality<keyof typeof lenFunctions>;
 }
 
 export { __len__ };

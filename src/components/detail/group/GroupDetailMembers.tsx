@@ -85,7 +85,7 @@ const GroupDetailMembers: React.FC<GroupDetailMembersProps> = ({
       }
       const asInvited = emails.find((each) => each === email);
       if (asInvited) {
-        setError(`'${asInvited}' is already invited.`);
+        setError(`${asInvited} is already invited.`);
         return;
       } else {
         setError("");

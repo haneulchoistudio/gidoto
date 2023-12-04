@@ -40,8 +40,6 @@ export default async function handler(
 
   const user = (await userDocs.findOne({ _id: body.user_responsible })) as User;
 
-  console.log(user, body.user_responsible);
-
   await userDocs.updateOne(
     { _id: body.user_responsible },
     {

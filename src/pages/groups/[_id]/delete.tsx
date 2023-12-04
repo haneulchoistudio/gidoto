@@ -49,7 +49,7 @@ export default function GroupDetailDelete({ user, group }: Props) {
     });
 
     if (!response.ok) {
-      setError("Failed to delete the event. Try it again.");
+      setError("Failed to delete the group. Try it again.");
       setLoading(false);
       return;
     }
@@ -58,7 +58,6 @@ export default function GroupDetailDelete({ user, group }: Props) {
   }
   async function goBack() {
     setError("");
-    setLoading(true);
     await router.push(
       {
         pathname: `/groups/${group._id}`,
@@ -82,7 +81,7 @@ export default function GroupDetailDelete({ user, group }: Props) {
         </p>
       )}
       <BinaryActionScreen
-        title={`Are you suer you want to delete?`}
+        title={`Wants to delete the group?`}
         description={group.data.name}
         action={{
           positive: {
