@@ -3,12 +3,14 @@ import Link from "next/link";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { lazy, useState } from "react";
 import { HiArrowLeft } from "react-icons/hi";
 import { twMerge } from "tailwind-merge";
 import { returns } from "~/server/ssr";
 import { len } from "~/server/utils";
 import type { GroupProps, User } from "~/types";
+import { useLanguage, useTheme } from "~/contexts";
+import { $ } from "~/client/utils";
 
 const ProfileButton = dynamic(() =>
   import("~/components/user").then((component) => component.ProfileButton)
@@ -22,6 +24,9 @@ type Props = {
 };
 
 export default function GroupsCreate({ user }: Props) {
+  const { lang, switchLanguage } = useLanguage();
+  const { theme, switchTheme } = useTheme();
+  const $data = $("pages", "createGroup");
   const router = useRouter();
 
   const [g, setG] = useState<GroupProps>({
@@ -46,13 +51,21 @@ export default function GroupsCreate({ user }: Props) {
     setLoading(true);
 
     if (![g.name.trim(), g.description.trim()].every(Boolean)) {
-      setError("Your must fill in your group name and description fields.");
+      setError(
+        lang === "en"
+          ? "You must fill in your group name and description fields."
+          : "팀 이름과 소개글을 입력해주셔야 합니다."
+      );
       setLoading(false);
       return;
     }
 
     if (![g.contact.email.trim(), g.contact.email.trim()].every(Boolean)) {
-      setError("Your must fill in your group leader's name and email fields.");
+      setError(
+        lang === "en"
+          ? "Your must fill in your group leader's name and email fields."
+          : "팀 리더의 이름과 이메일을 입력해주셔야 합니다."
+      );
       setLoading(false);
       return;
     }
@@ -64,7 +77,9 @@ export default function GroupsCreate({ user }: Props) {
     });
 
     if (!response.ok) {
-      setError("Failed to create your group. Try it again.");
+      setError(
+        lang === "en" ? "Failed to create your group. Try it again." : ""
+      );
       setLoading(false);
       return;
     }
@@ -84,7 +99,14 @@ export default function GroupsCreate({ user }: Props) {
   }
 
   return loading ? (
-    <Loading message="Creating the group..." fullScreen />
+    <Loading
+      message={
+        lang === "en"
+          ? "Creating the group..."
+          : "기토 팀을 만드는 중 입니다..."
+      }
+      fullScreen
+    />
   ) : (
     <>
       <header className="px-8 md:px-12 lg:px-16 2xl:px-32 flex justify-between items-center py-4 lg:py-5">
@@ -95,7 +117,9 @@ export default function GroupsCreate({ user }: Props) {
           >
             <HiArrowLeft />
           </Link>
-          <h1 className="font-bold text-lg lg:text-xl">Create Group</h1>
+          <h1 className="font-bold text-lg lg:text-xl">
+            {$data.titles.head[lang]}
+          </h1>
         </div>
         <ProfileButton
           image={user.data.image}
@@ -114,7 +138,7 @@ export default function GroupsCreate({ user }: Props) {
           )}
           <section className="flex flex-col gap-y-4 lg:gap-y-5">
             <h4 className="font-medium text-lg lg:text-xl">
-              Select your group theme.
+              {$data.labels.theme[lang]}
             </h4>
             <div className="flex flex-col gap-y-1.5 lg:gap-y-2.5">
               <ul className="grid grid-cols-4 gap-4">
@@ -131,7 +155,7 @@ export default function GroupsCreate({ user }: Props) {
                       : "-translate-y-0 border-neutral-600 text-neutral-600 bg-transparent lg:opacity-75 lg:hover:opacity-100 lg:hover:scale-105"
                   )}
                 >
-                  Basic
+                  {lang === "en" ? "Basic" : "기본테마"}
                 </button>
                 <button
                   disabled={g.theme === "adom:red"}
@@ -144,7 +168,7 @@ export default function GroupsCreate({ user }: Props) {
                       : "-translate-y-0 border-red-500 text-red-500 bg-transparent lg:opacity-75 lg:hover:opacity-100 lg:hover:scale-105"
                   )}
                 >
-                  Adom
+                  {lang === "en" ? "Adom" : "붉은테마"}
                 </button>
                 <button
                   disabled={g.theme === "tsahov:yellow"}
@@ -159,7 +183,7 @@ export default function GroupsCreate({ user }: Props) {
                       : "-translate-y-0 border-amber-500 text-amber-500 bg-transparent lg:opacity-75 lg:hover:opacity-100 lg:hover:scale-105"
                   )}
                 >
-                  Tsahov
+                  {lang === "en" ? "Tsahov" : "노란테마"}
                 </button>
                 <button
                   disabled={g.theme === "kahol:blue"}
@@ -172,7 +196,7 @@ export default function GroupsCreate({ user }: Props) {
                       : "-translate-y-0 border-blue-500 text-blue-500 bg-transparent lg:opacity-75 lg:hover:opacity-100 lg:hover:scale-105"
                   )}
                 >
-                  Kahol
+                  {lang === "en" ? "Kahol" : "푸른테마"}
                 </button>
               </ul>
               <p className={twMerge("text-neutral-600 text-sm font-light")}>
@@ -187,19 +211,19 @@ export default function GroupsCreate({ user }: Props) {
           </section>
           <section className="flex flex-col gap-y-2.5 lg:gap-y-3.5">
             <h4 className="font-medium text-lg lg:text-xl">
-              Name your prayer group.
+              {$data.labels.name[lang]}
             </h4>
             <input
               value={g.name}
               onChange={(e) => setG((g) => ({ ...g, name: e.target.value }))}
               type="text"
               className="px-4 py-3 rounded text-neutral-600 focus:text-neutral-900 placeholder:text-neutral-400"
-              placeholder="Example Church Young Adults"
+              placeholder={$data.placeholders.name[lang]}
             />
           </section>
           <section className="flex flex-col gap-y-2.5 lg:gap-y-3.5">
             <h4 className="font-medium text-lg lg:text-xl">
-              Describe the prayer group.
+              {$data.labels.description[lang]}
             </h4>
             <textarea
               value={g.description}
@@ -208,17 +232,31 @@ export default function GroupsCreate({ user }: Props) {
                 setG((g) => ({ ...g, description: e.target.value }))
               }
               className="px-4 py-3 rounded text-neutral-600 focus:text-neutral-900 placeholder:text-neutral-400 "
-              placeholder="We are the young adult team at Example church. We gather online at Gidoto to pray for one another if anyone needs prayers until it is fulfilled by God."
+              placeholder={$data.placeholders.description[lang]}
             />
           </section>
           <section className="flex flex-col gap-y-2.5 lg:gap-y-3.5">
             <div className="flex flex-col gap-y-0.5 lg:gap-y-1">
               <h4 className="font-medium text-lg lg:text-xl">
-                Contact the leader.
+                {$data.labels.contact[lang]}
               </h4>
               <p className="text-sm text-neutral-600 lg:text-base leading-[1.67] lg:leading-[1.67]">
-                Fill them out if the leader of the group{" "}
-                <strong>IS NOT YOU.</strong>
+                {
+                  <>
+                    {lang === "en" && (
+                      <>
+                        Fill them out if the leader of the group{" "}
+                        <strong>IS NOT YOU.</strong>
+                      </>
+                    )}
+                    {lang === "ko" && (
+                      <>
+                        <strong>본인이 팀 리더가 아닐 경우,</strong> 리더의
+                        정보를 입력해주세요.
+                      </>
+                    )}
+                  </>
+                }
               </p>
             </div>
             <ul className=" flex flex-col gap-y-1.5 lg:gap-y-2 w-full">
@@ -233,7 +271,7 @@ export default function GroupsCreate({ user }: Props) {
                   }
                   type="email"
                   className="relative w-full z-0 pr-4 pl-14 py-3 rounded text-neutral-600 focus:text-neutral-900 placeholder:text-neutral-400"
-                  placeholder="The leader's email."
+                  placeholder={$data.placeholders.contact.email[lang]}
                 />
                 <span className="text-sm font-medium absolute z-10 top-1/2 left-3 transform -translate-y-1/2 text-blue-500">
                   Email
@@ -250,7 +288,7 @@ export default function GroupsCreate({ user }: Props) {
                   }
                   type="text"
                   className="relative w-full z-0 pr-4 pl-14 py-3 rounded text-neutral-600 focus:text-neutral-900 placeholder:text-neutral-400"
-                  placeholder="The leader's name."
+                  placeholder={$data.placeholders.contact.name[lang]}
                 />
                 <span className="text-sm font-medium absolute z-10 top-1/2 left-3 transform -translate-y-1/2 text-blue-500">
                   Name
@@ -267,7 +305,7 @@ export default function GroupsCreate({ user }: Props) {
                   }
                   type="text"
                   className="relative w-full z-0 pr-4 pl-14 py-3 rounded text-neutral-600 focus:text-neutral-900 placeholder:text-neutral-400"
-                  placeholder="The leader's phone."
+                  placeholder={$data.placeholders.contact.phone[lang]}
                 />
                 <span className="text-sm font-medium absolute z-10 top-1/2 left-3 transform -translate-y-1/2 text-blue-500">
                   Phone
@@ -278,14 +316,28 @@ export default function GroupsCreate({ user }: Props) {
           <section className="flex flex-col gap-y-2.5 lg:gap-y-3.5">
             <div className="flex flex-col gap-y-0.5 lg:gap-y-1">
               <h4 className="font-medium text-lg lg:text-xl">
-                Social accounts of the group.
+                {$data.labels.socials[lang]}
               </h4>
               <p className="text-sm text-neutral-600 lg:text-base leading-[1.67] lg:leading-[1.67]">
-                Enter the social links{" "}
-                <strong className="uppercase">if you have them.</strong>
+                <>
+                  {lang === "en" && (
+                    <>
+                      Enter the social links{" "}
+                      <strong className="uppercase">if you have them.</strong>
+                    </>
+                  )}
+                  {lang === "ko" && (
+                    <>
+                      <strong className="uppercase">
+                        소셜 계정이 있으실 경우,
+                      </strong>{" "}
+                      링크들을 넣어주세요.
+                    </>
+                  )}
+                </>
               </p>
             </div>
-            <ul className=" flex flex-col gap-y-1.5 lg:gap-y-2 w-full">
+            <ul className="flex flex-col gap-y-1.5 lg:gap-y-2 w-full">
               <div className="relative w-full">
                 <input
                   value={g.accounts.instagram}
@@ -297,7 +349,7 @@ export default function GroupsCreate({ user }: Props) {
                   }
                   type="text"
                   className="relative w-full z-0 pr-4 pl-20 py-3 rounded text-neutral-600 text-sm placeholder:text-neutral-400 focus:text-neutral-900"
-                  placeholder="Paste your id here."
+                  placeholder={$data.placeholders.socials.instagram[lang]}
                 />
                 <span className="text-sm font-medium absolute z-10 top-1/2 left-3 transform -translate-y-1/2 text-blue-500">
                   Instagram
@@ -314,7 +366,7 @@ export default function GroupsCreate({ user }: Props) {
                   }
                   type="text"
                   className="relative w-full z-0 pr-4 pl-20 py-3 rounded text-neutral-600 text-sm placeholder:text-neutral-400 focus:text-neutral-900"
-                  placeholder="Paste your link here."
+                  placeholder={$data.placeholders.socials.kakaotalk[lang]}
                 />
                 <span className="text-sm font-medium absolute z-10 top-1/2 left-3 transform -translate-y-1/2 text-blue-500">
                   Kakaotalk
@@ -328,7 +380,7 @@ export default function GroupsCreate({ user }: Props) {
               type="submit"
               className="w-full px-8 py-3.5 rounded bg-neutral-900 lg:hover:bg-neutral-600 text-white font-medium text-lg"
             >
-              Create this group.
+              {$data.buttons.submit[lang]}
             </button>
           </section>
         </form>

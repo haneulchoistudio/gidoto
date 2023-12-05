@@ -8,8 +8,11 @@ import { HiArrowLeft } from "react-icons/hi";
 import { db } from "~/server/mongo";
 import { returns } from "~/server/ssr";
 import { appendToPwQ, getPwQ, len, validateDbQueryId } from "~/server/utils";
-import { txt } from "~/client/utils";
+import { $, txt } from "~/client/utils";
 import { Group, PrayerProps, User } from "~/types";
+import { twMerge } from "tailwind-merge";
+import { useLanguage, useTheme } from "~/contexts";
+import { FiCheck } from "react-icons/fi";
 
 const ProfileButton = dynamic(() =>
   import("~/components/user").then((component) => component.ProfileButton)
@@ -24,6 +27,9 @@ type Props = {
 };
 
 export default function GroupsCreate({ user, group }: Props) {
+  const { lang, switchLanguage } = useLanguage();
+  const { theme: _, switchTheme } = useTheme();
+  const $data = $("pages", "createPrayer");
   const router = useRouter();
 
   const [p, setP] = useState<PrayerProps>({
@@ -175,6 +181,41 @@ export default function GroupsCreate({ user, group }: Props) {
               className="px-4 py-3 rounded text-neutral-600 focus:text-neutral-900 placeholder:text-neutral-400"
               placeholder="Example Church Young Adults"
             />
+          </section>
+          <section className="flex flex-col gap-y-2.5 lg:gap-y-3.5">
+            <div className="flex justify-between items-center">
+              <p
+                className={twMerge(
+                  "text-sm font-mono lg:text-base",
+                  p.anonymous ? "text-green-500" : "text-neutral-400"
+                )}
+              >
+                {lang === "en"
+                  ? "Post it as an anonymous prayer?"
+                  : "익명으로 기도제목을 올리시겠습니까?"}
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  setP((p) => ({ ...p, anonymous: !p.anonymous }));
+                }}
+                className={twMerge(
+                  "relative overflow-hidden w-[22.5px] h-[22.5px] lg:w-[25px] lg:h-[25px] rounded-full border flex justify-center items-center group ring",
+                  p.anonymous
+                    ? "border-transparent ring-green-500"
+                    : "lg:hover:border-blue-500 ring-transparent"
+                )}
+              >
+                <FiCheck
+                  className={twMerge(
+                    "transition-all duration-[0.375s] ease-in-out",
+                    p.anonymous
+                      ? "text-green-500 scale-100"
+                      : "scale-0 text-neutral-400"
+                  )}
+                />
+              </button>
+            </div>
           </section>
           <section>
             <button

@@ -2,6 +2,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { HiArrowLeft } from "react-icons/hi";
 import { twMerge } from "tailwind-merge";
+import { useLanguage, useTheme } from "~/contexts";
 import { Group, GroupProps, Prayer, User } from "~/types";
 
 const ProfileButton = dynamic(() =>
@@ -24,6 +25,8 @@ const GroupPrayerHeader: React.FC<GroupPrayerHeaderProps> = ({
   group,
   prayer,
 }) => {
+  const { lang, switchLanguage } = useLanguage();
+  const { theme: _, switchTheme } = useTheme();
   return (
     <>
       <header
@@ -106,9 +109,16 @@ const GroupPrayerHeader: React.FC<GroupPrayerHeaderProps> = ({
               {prayer.data.title}
             </h3>
             <div className="mb-2.5 flex items-center gap-x-1.5 lg:gap-x-2.5">
-              <Profile image={user.data.image} asModal={false} />
+              <Profile
+                image={prayer.data.anonymous ? "/pray.png" : user.data.image}
+                asModal={false}
+              />
               <p className="text-sm lg:text-base opacity-60">
-                {user.data.name}
+                {prayer.data.anonymous
+                  ? lang === "en"
+                    ? "Unknown Member"
+                    : "미공개 멤버"
+                  : user.data.name}
               </p>
             </div>
           </div>

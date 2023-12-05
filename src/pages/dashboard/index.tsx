@@ -8,6 +8,8 @@ import { db } from "~/server/mongo";
 import { returns } from "~/server/ssr";
 import { len } from "~/server/utils";
 import { Group, GroupProps, User } from "~/types";
+import { useLanguage, useTheme } from "~/contexts";
+import { $ } from "~/client/utils";
 
 const ProfileButton = dynamic(() =>
   import("~/components/user").then((component) => component.ProfileButton)
@@ -25,11 +27,16 @@ type Props = {
 
 export default function Dashboard({ user, groups, notifications }: Props) {
   const router = useRouter();
+  const { lang, switchLanguage } = useLanguage();
+  const { theme, switchTheme } = useTheme();
+  const $data = $("pages", "dashboard");
 
   return (
     <>
       <header className="px-8 md:px-12 lg:px-16 2xl:px-32 flex justify-between items-center py-5 lg:py-6">
-        <h1 className="font-bold text-lg lg:text-xl">Dashboard</h1>
+        <h1 className="font-bold text-lg lg:text-xl">
+          {$data.titles.head[lang]}
+        </h1>
         <ProfileButton
           image={user.data.image}
           isOnFreePlan={user.data.subscription === "free"}
@@ -39,20 +46,22 @@ export default function Dashboard({ user, groups, notifications }: Props) {
         <div className="md:col-span-3 lg:col-span-7 2xl:col-span-8">
           <article className="flex flex-col gap-y-4 lg:gap-y-5">
             <div className="flex justify-between items-center gap-x-3.5 lg:gap-x-5">
-              <h2 className="font-medium text-xl lg:text-2xl">Groups</h2>
+              <h2 className="font-medium text-xl lg:text-2xl">
+                {$data.titles.containers.groupList[lang]}
+              </h2>
               <ul className="flex items-center gap-x-2.5 lg:gap-x-3.5">
                 <Link
                   href={"/groups/join"}
                   className="text-sm lg:text-base flex items-center gap-x-1 text-blue-500 underline lg:no-underline lg:text-neutral-600 lg:hover:text-blue-500 lg:hover:underline"
                 >
-                  <span>Join</span>
                   <FiSearch />
+                  <span>{$data.buttons.searchGroup[lang]}</span>
                 </Link>
                 <Link
                   href={"/groups/create"}
                   className="text-sm lg:tex-base px-2.5 py-1 lg:px-3 lg:py-1.5 rounded border flex items-center gap-x-1 lg:gap-x-1.5 font-medium border-neutral-600 lg:hover:bg-neutral-900 lg:hover:border-neutral-900 lg:hover:text-white"
                 >
-                  <span>Create</span>
+                  <span>{$data.buttons.newGroup[lang]}</span>
                   <FiPlus className="text-lg lg:text-xl" />
                 </Link>
               </ul>
@@ -109,7 +118,7 @@ export default function Dashboard({ user, groups, notifications }: Props) {
                           }}
                           className="font-medium lg:text-blue-400 lg:group-hover:text-blue-500 text-blue-500 lg:group-hover:hover:text-blue-300"
                         >
-                          Edit
+                          {$data.buttons.edit[lang]}
                         </button>
                         <button
                           type="button"
@@ -125,7 +134,7 @@ export default function Dashboard({ user, groups, notifications }: Props) {
                           }}
                           className="font-medium lg:text-red-400 lg:group-hover:text-red-500 text-red-500 lg:group-hover:hover:text-red-300"
                         >
-                          Delete
+                          {$data.buttons.delete[lang]}
                         </button>
                       </div>
                     )}
@@ -134,14 +143,16 @@ export default function Dashboard({ user, groups, notifications }: Props) {
               </ul>
             ) : (
               <p className="p-6 lg:p-8 rounded border bg-neutral-100 text-neutral-600 text-center">
-                You do not have a group yet.
+                {$data.paragraphs.noGroup[lang]}
               </p>
             )}
           </article>
         </div>
         <div className="md:col-span-2 lg:col-span-5 2xl:col-span-4">
           <article className="flex flex-col gap-y-4 lg:gap-y-5">
-            <h2 className="font-medium text-xl lg:text-2xl">Notifications</h2>
+            <h2 className="font-medium text-xl lg:text-2xl">
+              {$data.titles.containers.inviteList[lang]}
+            </h2>
             {notifications.length >= 1 ? (
               <ul className="flex flex-col w-full">
                 {notifications.map((each, idx) => (
@@ -169,7 +180,7 @@ export default function Dashboard({ user, groups, notifications }: Props) {
               </ul>
             ) : (
               <p className="p-6 lg:p-8 rounded border bg-neutral-100 text-neutral-600 text-center">
-                You do not have a notificiation.
+                {$data.paragraphs.noInvite[lang]}
               </p>
             )}
           </article>

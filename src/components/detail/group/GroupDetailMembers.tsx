@@ -3,6 +3,8 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { FiPlus } from "react-icons/fi";
 import { twMerge } from "tailwind-merge";
+import { $ } from "~/client/utils";
+import { useLanguage, useTheme } from "~/contexts";
 import { Group, GroupProps, User } from "~/types";
 
 const Profile = dynamic(() =>
@@ -33,6 +35,9 @@ const GroupDetailMembers: React.FC<GroupDetailMembersProps> = ({
   theme,
   members,
 }) => {
+  const { lang, switchLanguage } = useLanguage();
+  const { theme: _, switchTheme } = useTheme();
+  const $data = $("pages", "groupDetail");
   const router = useRouter();
 
   const [email, setEmail] = useState<string>("");
@@ -104,7 +109,9 @@ const GroupDetailMembers: React.FC<GroupDetailMembersProps> = ({
   return (
     <div className="flex flex-col items-center gap-3.5 lg:gap-5">
       <div className="flex items-center justify-between gap-x-4 w-full">
-        <h2 className="font-medium text-xl lg:text-2xl">Members</h2>
+        <h2 className="font-medium text-xl lg:text-2xl">
+          {$data.titles.containers.members[lang]}
+        </h2>
         {openInvite ? (
           <div className="flex items-center gap-x-2.5">
             <button
@@ -112,7 +119,7 @@ const GroupDetailMembers: React.FC<GroupDetailMembersProps> = ({
               onClick={() => setOpenInvite(false)}
               className="flex items-center  py-1 lg:py-1.5 font-medium text-red-500 lg:hover:text-red-400"
             >
-              <span>Close</span>
+              <span>{$data.buttons.close[lang]}</span>
             </button>
             {email && (
               <button
@@ -121,7 +128,7 @@ const GroupDetailMembers: React.FC<GroupDetailMembersProps> = ({
                 onClick={invite}
                 className="text-sm lg:text-base px-2.5 py-1 lg:px-3 lg:py-1.5 rounded border flex items-center gap-x-1 lg:gap-x-1.5 font-medium border-neutral-600 lg:hover:bg-neutral-900 lg:hover:border-neutral-900 lg:hover:text-white"
               >
-                <span>Send</span>
+                <span>{$data.buttons.send[lang]}</span>
                 <FiPlus className="text-lg lg:text-xl" />
               </button>
             )}
@@ -133,7 +140,7 @@ const GroupDetailMembers: React.FC<GroupDetailMembersProps> = ({
               onClick={() => setOpenInvite(true)}
               className="text-sm lg:text-base px-2.5 py-1 lg:px-3 lg:py-1.5 rounded border flex items-center gap-x-1 lg:gap-x-1.5 font-medium border-neutral-600 lg:hover:bg-neutral-900 lg:hover:border-neutral-900 lg:hover:text-white"
             >
-              <span>Invite</span>
+              <span>{$data.buttons.invite[lang]}</span>
               <FiPlus className="text-lg lg:text-xl" />
             </button>
           </div>
@@ -153,7 +160,7 @@ const GroupDetailMembers: React.FC<GroupDetailMembersProps> = ({
                 error &&
                   "focus:ring-transparent focus:border-red-500 border-red-500/25"
               )}
-              placeholder="Enter the email to invite."
+              placeholder={$data.placeholders.invite[lang]}
             />
           )}
           {error && (
@@ -191,7 +198,7 @@ const GroupDetailMembers: React.FC<GroupDetailMembersProps> = ({
         </ul>
       ) : (
         <p className="p-6 lg:p-8 rounded border bg-neutral-100 text-neutral-600 text-center w-full">
-          Your group do not have a member yet.
+          {$data.paragraphs.noMember[lang]}
         </p>
       )}
     </div>

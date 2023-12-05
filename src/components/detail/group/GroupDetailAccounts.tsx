@@ -1,4 +1,6 @@
 import { SiInstagram, SiKakaotalk } from "react-icons/si";
+import { $ } from "~/client/utils";
+import { useLanguage, useTheme } from "~/contexts";
 
 interface GroupDetailAccountsProps {
   instagram: string;
@@ -9,10 +11,15 @@ const GroupDetailAccounts: React.FC<GroupDetailAccountsProps> = ({
   instagram,
   kakaotalk,
 }) => {
+  const { lang, switchLanguage } = useLanguage();
+  const { theme: _, switchTheme } = useTheme();
+  const $data = $("pages", "groupDetail");
   return (
     <div className="flex flex-col items-center gap-3.5 lg:gap-5">
       <div className="flex items-center justify-between gap-x-4 w-full">
-        <h2 className="font-medium text-xl lg:text-2xl">Accounts</h2>
+        <h2 className="font-medium text-xl lg:text-2xl">
+          {$data.titles.containers.accounts[lang]}
+        </h2>
       </div>
       <ul className="flex items-center justify-start gap-x-2.5 w-full">
         {instagram && (

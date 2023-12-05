@@ -1,4 +1,6 @@
 import { FiMail, FiPhone, FiVoicemail } from "react-icons/fi";
+import { $ } from "~/client/utils";
+import { useLanguage, useTheme } from "~/contexts";
 
 interface GroupDetailContactLeaderProps {
   name: string;
@@ -11,10 +13,15 @@ const GroupDetailContactLeader: React.FC<GroupDetailContactLeaderProps> = ({
   name,
   phone,
 }) => {
+  const { lang, switchLanguage } = useLanguage();
+  const { theme: _, switchTheme } = useTheme();
+  const $data = $("pages", "groupDetail");
   return (
     <div className="flex flex-col items-center gap-3.5 lg:gap-5">
       <div className="flex items-center justify-between gap-x-4 w-full">
-        <h2 className="font-medium text-xl lg:text-2xl">Contact the Leader</h2>
+        <h2 className="font-medium text-xl lg:text-2xl">
+          {$data.titles.containers.contact[lang]}
+        </h2>
       </div>
       <ul className="flex flex-col w-full">
         {name && (

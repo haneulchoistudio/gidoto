@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { twMerge } from "tailwind-merge";
+import { $ } from "~/client/utils";
+import { useLanguage, useTheme } from "~/contexts";
 import { Group, GroupProps, User } from "~/types";
 
 interface GroupDetailDescription {
@@ -13,6 +15,9 @@ const GroupDetailDescription: React.FC<GroupDetailDescription> = ({
   theme,
   user,
 }) => {
+  const { lang, switchLanguage } = useLanguage();
+  const { theme: _, switchTheme } = useTheme();
+  const $data = $("pages", "groupDetail");
   return (
     <article
       className={twMerge(
@@ -36,7 +41,7 @@ const GroupDetailDescription: React.FC<GroupDetailDescription> = ({
             as={`/groups/${group._id}/edit`}
             className="w-max text-sm lg:text-base px-2.5 py-1 lg:px-3 lg:py-1.5 rounded border flex items-center gap-x-1 lg:gap-x-1.5 font-medium border-neutral-600 lg:hover:bg-neutral-900 lg:hover:border-neutral-900 lg:hover:text-white"
           >
-            Edit
+            {$data.buttons.edit[lang]}
           </Link>
           <Link
             href={{
@@ -46,7 +51,7 @@ const GroupDetailDescription: React.FC<GroupDetailDescription> = ({
             as={`/groups/${group._id}/delete`}
             className="w-max text-sm lg:text-base px-2.5 py-1 lg:px-3 lg:py-1.5 rounded border flex items-center gap-x-1 lg:gap-x-1.5 font-medium border-neutral-600 lg:hover:bg-neutral-900 lg:hover:border-neutral-900 lg:hover:text-white"
           >
-            Delete
+            {$data.buttons.delete[lang]}
           </Link>
         </div>
       )}

@@ -6,6 +6,8 @@ import { db } from "~/server/mongo";
 import { Group, Prayer, User } from "~/types";
 import { len, validateDbQueryId } from "~/server/utils";
 import { returns } from "~/server/ssr";
+import { useLanguage, useTheme } from "~/contexts";
+import { $ } from "~/client/utils";
 
 const GroupDetailHeader = dynamic(() =>
   import("~/components/detail").then((component) => component.GroupDetailHeader)
@@ -50,7 +52,7 @@ type Props = {
 };
 
 export default function GroupDetail({ user, group, members, prayers }: Props) {
-  const [theme, _theme] = useState<(typeof group)["data"]["theme"]>(
+  const [theme, __] = useState<(typeof group)["data"]["theme"]>(
     group.data.theme
   );
 

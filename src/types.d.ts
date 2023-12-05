@@ -8,7 +8,11 @@ export interface UserProps {
   bio: string;
   groups: string[];
   subscription: "free" | "paid";
+
   preferred_language: "en" | "ko";
+  preferred_view_profile: "public" | "hidden";
+  preferred_theme: "light" | "dark";
+  preferred_show_nickname: boolean;
 }
 
 export type User = {

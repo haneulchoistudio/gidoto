@@ -62,6 +62,9 @@ const nextAuthOptions: NextAuthOptions = {
             groups: [],
             subscription: "free",
             preferred_language: "en",
+            preferred_show_nickname: false,
+            preferred_theme: "light",
+            preferred_view_profile: "hidden",
           },
         });
         const newUserDocs = await db("users");
