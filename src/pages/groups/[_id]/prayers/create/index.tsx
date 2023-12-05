@@ -113,7 +113,14 @@ export default function GroupsCreate({ user, group }: Props) {
   }
 
   return loading ? (
-    <Loading message="Creating the prayer..." fullScreen />
+    <Loading
+      message={
+        lang === "en"
+          ? `Creating the prayers...`
+          : "기도제목을 생성 중 입니다..."
+      }
+      fullScreen
+    />
   ) : (
     <>
       <header className="px-8 md:px-12 lg:px-16 2xl:px-32 flex justify-between items-center py-4 lg:py-5">
@@ -128,7 +135,9 @@ export default function GroupsCreate({ user, group }: Props) {
           >
             <HiArrowLeft />
           </Link>
-          <h1 className="font-bold text-lg lg:text-xl">Create Prayer</h1>
+          <h1 className="font-bold text-lg lg:text-xl">
+            {$data.titles.head[lang]}
+          </h1>
         </div>
         <ProfileButton
           image={user.data.image}
@@ -148,38 +157,38 @@ export default function GroupsCreate({ user, group }: Props) {
 
           <section className="flex flex-col gap-y-2.5 lg:gap-y-3.5">
             <h4 className="font-medium text-lg lg:text-xl">
-              Give a title to your prayer.
+              {$data.labels.title[lang]}
             </h4>
             <input
               value={p.title}
               onChange={(e) => setP((p) => ({ ...p, title: e.target.value }))}
               type="text"
               className="px-4 py-3 rounded text-neutral-600 focus:text-neutral-900 placeholder:text-neutral-400"
-              placeholder="Example Church Young Adults"
+              placeholder={$data.placeholders.title[lang]}
             />
           </section>
           <section className="flex flex-col gap-y-2.5 lg:gap-y-3.5">
             <h4 className="font-medium text-lg lg:text-xl">
-              Write a short description for the prayer.
+              {$data.labels.short[lang]}
             </h4>
             <input
               value={p.short}
               onChange={(e) => setP((p) => ({ ...p, short: e.target.value }))}
               type="text"
               className="px-4 py-3 rounded text-neutral-600 focus:text-neutral-900 placeholder:text-neutral-400"
-              placeholder="Example Church Young Adults"
+              placeholder={$data.placeholders.short[lang]}
             />
           </section>
           <section className="flex flex-col gap-y-2.5 lg:gap-y-3.5">
             <h4 className="font-medium text-lg lg:text-xl">
-              Write a detail description for the prayer.
+              {$data.labels.long[lang]}
             </h4>
             <textarea
               rows={4}
               value={p.long}
               onChange={(e) => setP((p) => ({ ...p, long: e.target.value }))}
               className="px-4 py-3 rounded text-neutral-600 focus:text-neutral-900 placeholder:text-neutral-400"
-              placeholder="Example Church Young Adults"
+              placeholder={$data.placeholders.long[lang]}
             />
           </section>
           <section className="flex flex-col gap-y-2.5 lg:gap-y-3.5">
@@ -190,9 +199,7 @@ export default function GroupsCreate({ user, group }: Props) {
                   p.anonymous ? "text-green-500" : "text-neutral-400"
                 )}
               >
-                {lang === "en"
-                  ? "Post it as an anonymous prayer?"
-                  : "익명으로 기도제목을 올리시겠습니까?"}
+                {$data.paragraphs.anonymous[lang]}
               </p>
               <button
                 type="button"
@@ -223,7 +230,7 @@ export default function GroupsCreate({ user, group }: Props) {
               type="submit"
               className="w-full px-8 py-3.5 rounded bg-neutral-900 lg:hover:bg-neutral-600 text-white font-medium text-lg"
             >
-              Create this prayer.
+              {$data.buttons.submit[lang]}
             </button>
           </section>
         </form>

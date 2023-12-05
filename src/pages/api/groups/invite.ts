@@ -19,6 +19,7 @@ export default async function handler(
     email: string;
     name: string;
     message: string;
+    lang: "en" | "ko";
   };
 
   if (!body) {
@@ -41,21 +42,41 @@ export default async function handler(
     html: `
     <div>
         <h2 style="margin-bottom: 20px;">
-            Gidoto Invitation
+            ${
+              body.lang === "en"
+                ? "Gidoto Group Invitation"
+                : "기도터 그룹 초대장"
+            }
         </h2>
         <div style="margin-bottom: 10px;">
             <p style="margin-bottom:3.5px;">
-                <strong>From</strong> ${body.name}'s member
+               ${
+                 body.lang === "en"
+                   ? `<strong>From</strong> ${body.name}'s member`
+                   : `<strong>보낸이</strong> ${body.name} 멤버`
+               }
             </p>
             <p>
-                <strong>To</strong> You (${body.email})
+                ${
+                  body.lang === "en"
+                    ? `<strong>To</strong> You (${body.email})`
+                    : `<strong>받는이</strong> 당신 (${body.email})`
+                }
             </p>
         </div>
         <p style="margin-bottom: 30px; font-size: 17px;">
-            <strong><u>TO ACCEPT OR DECLINE,</u></strong> visit the link <a href="${inviteLink}" target="_blank">here</a>.
+            ${
+              body.lang === "en"
+                ? `<strong><u>TO ACCEPT OR DECLINE,</u></strong> visit the link <a href="${inviteLink}" target="_blank">here</a>.`
+                : `<strong><u>초대장을 수락 또는 거절 하시려면,</u></strong> 링크를 따라 방문해주세요 <a href="${inviteLink}" target="_blank">여기</a>.`
+            }
         </p>
         <p style="font-family: monospace; font-size: 13.5px; color: #666;">
-            This mail was delivered via the origin site of <a href="http://localhost:3000" target="_blank">Gidoto team</a>.
+            ${
+              body.lang === "en"
+                ? `This mail was delivered via the origin site of <a href="http://localhost:3000" target="_blank">Gidoto team</a>.`
+                : `이 메일은 기도터의 공식 사이트 <a href="http://localhost:3000" target="_blank">기도터 팀</a> 으로부터 발송되었습니다 `
+            }
         </p>
     </div>
     `,

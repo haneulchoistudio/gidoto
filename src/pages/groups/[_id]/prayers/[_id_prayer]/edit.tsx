@@ -3,7 +3,7 @@ import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { txt } from "~/client/utils";
+import { $, txt } from "~/client/utils";
 import { returns } from "~/server/ssr";
 import { validateDbQueryId } from "~/server/utils";
 import type { Group, Prayer, PrayerProps, User } from "~/types";
@@ -12,6 +12,7 @@ import { HiArrowLeft } from "react-icons/hi";
 import { FiCheck } from "react-icons/fi";
 import { twMerge } from "tailwind-merge";
 import { db } from "~/server/mongo";
+import { useLanguage, useTheme } from "~/contexts";
 
 const ProfileButton = dynamic(() =>
   import("~/components/user").then((component) => component.ProfileButton)
@@ -31,6 +32,9 @@ export default function GroupDetailPrayerDetailEdit({
   group,
   prayer,
 }: Props) {
+  const { lang, switchLanguage } = useLanguage();
+  const { theme: _, switchTheme } = useTheme();
+  const $data = $("pages", "editPrayer");
   const router = useRouter();
 
   const [o, setO] = useState<PrayerProps>(prayer.data);
@@ -115,7 +119,14 @@ export default function GroupDetailPrayerDetailEdit({
   }, [n]);
 
   return loading ? (
-    <Loading message="Editting the prayer..." fullScreen />
+    <Loading
+      message={
+        lang === "en"
+          ? `Editting the prayer...`
+          : "기도제목을 수정 중 입니다..."
+      }
+      fullScreen
+    />
   ) : (
     <>
       <header className="px-8 md:px-12 lg:px-16 2xl:px-32 flex justify-between items-center py-4 lg:py-5">
@@ -130,7 +141,9 @@ export default function GroupDetailPrayerDetailEdit({
           >
             <HiArrowLeft />
           </Link>
-          <h1 className="font-bold text-lg lg:text-xl">Edit Group</h1>
+          <h1 className="font-bold text-lg lg:text-xl">
+            {$data.titles.head[lang]}
+          </h1>
         </div>
         <div className="flex items-center gap-x-2.5">
           {diff && (
@@ -138,7 +151,7 @@ export default function GroupDetailPrayerDetailEdit({
               <span className="w-[17.5px] h-[17.5px] lg:w-[22.5px] lg:h-[22.5px] rounded-full bg-blue-500 text-white flex justify-center items-center">
                 <FiCheck />
               </span>
-              <span>Editting</span>
+              <span>{lang === "en" ? "Editting" : "수정 중"}</span>
             </span>
           )}
           <ProfileButton
@@ -160,38 +173,38 @@ export default function GroupDetailPrayerDetailEdit({
 
           <section className="flex flex-col gap-y-2.5 lg:gap-y-3.5">
             <h4 className="font-medium text-lg lg:text-xl">
-              Give a title to your prayer.
+              {$data.labels.title[lang]}
             </h4>
             <input
               value={n.title}
               onChange={(e) => setN((p) => ({ ...p, title: e.target.value }))}
               type="text"
               className="px-4 py-3 rounded text-neutral-600 focus:text-neutral-900 placeholder:text-neutral-400"
-              placeholder="Example Church Young Adults"
+              placeholder={$data.placeholders.title[lang]}
             />
           </section>
           <section className="flex flex-col gap-y-2.5 lg:gap-y-3.5">
             <h4 className="font-medium text-lg lg:text-xl">
-              Write a short description for the prayer.
+              {$data.labels.short[lang]}
             </h4>
             <input
               value={n.short}
               onChange={(e) => setN((p) => ({ ...p, short: e.target.value }))}
               type="text"
               className="px-4 py-3 rounded text-neutral-600 focus:text-neutral-900 placeholder:text-neutral-400"
-              placeholder="Example Church Young Adults"
+              placeholder={$data.placeholders.short[lang]}
             />
           </section>
           <section className="flex flex-col gap-y-2.5 lg:gap-y-3.5">
             <h4 className="font-medium text-lg lg:text-xl">
-              Write a detail description for the prayer.
+              {$data.labels.long[lang]}
             </h4>
             <textarea
               rows={4}
               value={n.long}
               onChange={(e) => setN((p) => ({ ...p, long: e.target.value }))}
               className="px-4 py-3 rounded text-neutral-600 focus:text-neutral-900 placeholder:text-neutral-400"
-              placeholder="Example Church Young Adults"
+              placeholder={$data.placeholders.long[lang]}
             />
           </section>
           {diff && (
@@ -201,7 +214,7 @@ export default function GroupDetailPrayerDetailEdit({
                 type="submit"
                 className="w-full px-8 py-3.5 rounded bg-neutral-900 lg:hover:bg-neutral-600 text-white font-medium text-lg"
               >
-                Edit this prayer.
+                {$data.buttons.submit[lang]}
               </button>
             </section>
           )}

@@ -161,7 +161,10 @@ export default function Dashboard({ user, groups, notifications }: Props) {
                     className="py-2.5 lg:hover:px-3.5 border border-transparent lg:hover:border-neutral-600/25 rounded transition-all duration-[0.35s] ease-in-out cursor-pointer"
                   >
                     <p className="tex-sm lg:text-base text-neutral-600">
-                      {each.name}&apos;s member invites you to join.
+                      <strong>{each.name}</strong>
+                      {lang === "en"
+                        ? `'s member invites you to join.`
+                        : ` 멤버가 당신에게 초대장을 보냈습니다.`}
                     </p>
                     <ul className="flex items-center">
                       <Link
@@ -172,7 +175,7 @@ export default function Dashboard({ user, groups, notifications }: Props) {
                         as={`/groups/${each._id}`}
                         className="underline text-blue-500 text-sm lg:text-base font-medium lg:no-underline lg:hover:underline lg:hover:text-blue-400"
                       >
-                        View
+                        {$data.buttons.view[lang]}
                       </Link>
                     </ul>
                   </div>

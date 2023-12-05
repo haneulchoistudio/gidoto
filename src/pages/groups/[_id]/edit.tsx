@@ -11,6 +11,8 @@ import { db } from "~/server/mongo";
 import { validateDbQueryId } from "~/server/utils";
 import { returns } from "~/server/ssr";
 import type { Group, GroupProps, User } from "~/types";
+import { useLanguage, useTheme } from "~/contexts";
+import { $ } from "~/client/utils";
 
 const ProfileButton = dynamic(() =>
   import("~/components/user").then((component) => component.ProfileButton)
@@ -25,6 +27,9 @@ type Props = {
 };
 
 export default function GroupDetailEdit({ user, group }: Props) {
+  const { lang, switchLanguage } = useLanguage();
+  const { theme, switchTheme } = useTheme();
+  const $data = $("pages", "editGroup");
   const router = useRouter();
 
   const [o, setO] = useState<GroupProps>(group.data);
@@ -92,7 +97,12 @@ export default function GroupDetailEdit({ user, group }: Props) {
   }, [n]);
 
   return loading ? (
-    <Loading message="Creating the group..." fullScreen />
+    <Loading
+      message={
+        lang === "en" ? "Editting the group..." : "그룹을 수정하고 있습니다..."
+      }
+      fullScreen
+    />
   ) : (
     <>
       <header className="px-8 md:px-12 lg:px-16 2xl:px-32 flex justify-between items-center py-4 lg:py-5">
@@ -107,7 +117,9 @@ export default function GroupDetailEdit({ user, group }: Props) {
           >
             <HiArrowLeft />
           </Link>
-          <h1 className="font-bold text-lg lg:text-xl">Edit Group</h1>
+          <h1 className="font-bold text-lg lg:text-xl">
+            {$data.titles.head[lang]}
+          </h1>
         </div>
         <div className="flex items-center gap-x-2.5">
           {diff && (
@@ -115,7 +127,7 @@ export default function GroupDetailEdit({ user, group }: Props) {
               <span className="w-[17.5px] h-[17.5px] lg:w-[22.5px] lg:h-[22.5px] rounded-full bg-blue-500 text-white flex justify-center items-center">
                 <FiCheck />
               </span>
-              <span>Editting</span>
+              <span>{lang === "en" ? "Editting" : "수정 중"}</span>
             </span>
           )}
           <ProfileButton
@@ -136,7 +148,7 @@ export default function GroupDetailEdit({ user, group }: Props) {
           )}
           <section className="flex flex-col gap-y-4 lg:gap-y-5">
             <h4 className="font-medium text-lg lg:text-xl">
-              Select your group theme.
+              {$data.labels.theme[lang]}
             </h4>
             <div className="flex flex-col gap-y-1.5 lg:gap-y-2.5">
               <ul className="grid grid-cols-4 gap-4">
@@ -209,19 +221,19 @@ export default function GroupDetailEdit({ user, group }: Props) {
           </section>
           <section className="flex flex-col gap-y-2.5 lg:gap-y-3.5">
             <h4 className="font-medium text-lg lg:text-xl">
-              Name your prayer group.
+              {$data.labels.name[lang]}
             </h4>
             <input
               value={n.name}
               onChange={(e) => setN((g) => ({ ...g, name: e.target.value }))}
               type="text"
               className="px-4 py-3 rounded text-neutral-600 focus:text-neutral-900 placeholder:text-neutral-400"
-              placeholder="Example Church Young Adults"
+              placeholder={$data.placeholders.name[lang]}
             />
           </section>
           <section className="flex flex-col gap-y-2.5 lg:gap-y-3.5">
             <h4 className="font-medium text-lg lg:text-xl">
-              Describe the prayer group.
+              {$data.labels.description[lang]}
             </h4>
             <textarea
               value={n.description}
@@ -230,17 +242,31 @@ export default function GroupDetailEdit({ user, group }: Props) {
               }
               rows={4}
               className="px-4 py-3 rounded text-neutral-600 focus:text-neutral-900 placeholder:text-neutral-400 "
-              placeholder="We are the young adult team at Example church. We gather online at Gidoto to pray for one another if anyone needs prayers until it is fulfilled by God."
+              placeholder={$data.placeholders.description[lang]}
             />
           </section>
           <section className="flex flex-col gap-y-2.5 lg:gap-y-3.5">
             <div className="flex flex-col gap-y-0.5 lg:gap-y-1">
               <h4 className="font-medium text-lg lg:text-xl">
-                Contact the leader.
+                {$data.labels.contact[lang]}
               </h4>
               <p className="text-sm text-neutral-600 lg:text-base leading-[1.67] lg:leading-[1.67]">
-                Fill them out if the leader of the group{" "}
-                <strong>IS NOT YOU.</strong>
+                {
+                  <>
+                    {lang === "en" && (
+                      <>
+                        Fill them out if the leader of the group{" "}
+                        <strong>IS NOT YOU.</strong>
+                      </>
+                    )}
+                    {lang === "ko" && (
+                      <>
+                        <strong>본인이 팀 리더가 아닐 경우,</strong> 리더의
+                        정보를 입력해주세요.
+                      </>
+                    )}
+                  </>
+                }
               </p>
             </div>
             <ul className=" flex flex-col gap-y-1.5 lg:gap-y-2 w-full">
@@ -255,7 +281,7 @@ export default function GroupDetailEdit({ user, group }: Props) {
                   }
                   type="email"
                   className="relative w-full z-0 pr-4 pl-14 py-3 rounded text-neutral-600 focus:text-neutral-900 placeholder:text-neutral-400"
-                  placeholder="The leader's email."
+                  placeholder={$data.placeholders.contact.email[lang]}
                 />
                 <span className="text-sm font-medium absolute z-10 top-1/2 left-3 transform -translate-y-1/2 text-blue-500">
                   Email
@@ -272,7 +298,7 @@ export default function GroupDetailEdit({ user, group }: Props) {
                   }
                   type="text"
                   className="relative w-full z-0 pr-4 pl-14 py-3 rounded text-neutral-600 focus:text-neutral-900 placeholder:text-neutral-400"
-                  placeholder="The leader's name."
+                  placeholder={$data.placeholders.contact.name[lang]}
                 />
                 <span className="text-sm font-medium absolute z-10 top-1/2 left-3 transform -translate-y-1/2 text-blue-500">
                   Name
@@ -289,7 +315,7 @@ export default function GroupDetailEdit({ user, group }: Props) {
                   }
                   type="text"
                   className="relative w-full z-0 pr-4 pl-14 py-3 rounded text-neutral-600 focus:text-neutral-900 placeholder:text-neutral-400"
-                  placeholder="The leader's phone."
+                  placeholder={$data.placeholders.contact.phone[lang]}
                 />
                 <span className="text-sm font-medium absolute z-10 top-1/2 left-3 transform -translate-y-1/2 text-blue-500">
                   Phone
@@ -300,11 +326,25 @@ export default function GroupDetailEdit({ user, group }: Props) {
           <section className="flex flex-col gap-y-2.5 lg:gap-y-3.5">
             <div className="flex flex-col gap-y-0.5 lg:gap-y-1">
               <h4 className="font-medium text-lg lg:text-xl">
-                Social accounts of the group.
+                {$data.labels.socials[lang]}
               </h4>
               <p className="text-sm text-neutral-600 lg:text-base leading-[1.67] lg:leading-[1.67]">
-                Enter the social links{" "}
-                <strong className="uppercase">if you have them.</strong>
+                <>
+                  {lang === "en" && (
+                    <>
+                      Enter the social links{" "}
+                      <strong className="uppercase">if you have them.</strong>
+                    </>
+                  )}
+                  {lang === "ko" && (
+                    <>
+                      <strong className="uppercase">
+                        소셜 계정이 있으실 경우,
+                      </strong>{" "}
+                      링크들을 넣어주세요.
+                    </>
+                  )}
+                </>
               </p>
             </div>
             <ul className=" flex flex-col gap-y-1.5 lg:gap-y-2 w-full">
@@ -319,7 +359,7 @@ export default function GroupDetailEdit({ user, group }: Props) {
                   }
                   type="text"
                   className="relative w-full z-0 pr-4 pl-20 py-3 rounded text-neutral-600 text-sm placeholder:text-neutral-400 focus:text-neutral-900"
-                  placeholder="Paste your id here."
+                  placeholder={$data.placeholders.socials.instagram[lang]}
                 />
                 <span className="text-sm font-medium absolute z-10 top-1/2 left-3 transform -translate-y-1/2 text-blue-500">
                   Instagram
@@ -336,7 +376,7 @@ export default function GroupDetailEdit({ user, group }: Props) {
                   }
                   type="text"
                   className="relative w-full z-0 pr-4 pl-20 py-3 rounded text-neutral-600 text-sm placeholder:text-neutral-400 focus:text-neutral-900"
-                  placeholder="Paste your link here."
+                  placeholder={$data.placeholders.socials.kakaotalk[lang]}
                 />
                 <span className="text-sm font-medium absolute z-10 top-1/2 left-3 transform -translate-y-1/2 text-blue-500">
                   Kakaotalk
@@ -351,7 +391,7 @@ export default function GroupDetailEdit({ user, group }: Props) {
                 type="submit"
                 className="w-full px-8 py-3.5 rounded bg-neutral-900 lg:hover:bg-neutral-600 text-white font-medium text-lg"
               >
-                Edit this group.
+                {$data.buttons.submit[lang]}
               </button>
             </section>
           )}

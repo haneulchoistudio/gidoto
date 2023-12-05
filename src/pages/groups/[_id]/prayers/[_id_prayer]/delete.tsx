@@ -7,6 +7,8 @@ import { returns } from "~/server/ssr";
 import { validateDbQueryId } from "~/server/utils";
 import type { Group, Prayer, User } from "~/types";
 import { db } from "~/server/mongo";
+import { useLanguage, useTheme } from "~/contexts";
+import { $ } from "~/client/utils";
 
 const BinaryActionScreen = dynamic(() =>
   import("~/components/status").then(
@@ -28,6 +30,9 @@ export default function GroupDetailPrayerDetailDelete({
   group,
   prayer,
 }: Props) {
+  const { lang, switchLanguage } = useLanguage();
+  const { theme, switchTheme } = useTheme();
+  const $data = $("pages", "deletePrayer");
   const router = useRouter();
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -35,7 +40,9 @@ export default function GroupDetailPrayerDetailDelete({
 
   async function deletePrayer() {
     const confirmDelete = confirm(
-      `Are you sure you want to delete '${prayer.data.title}'?`
+      lang === "en"
+        ? `Are you sure you want to delete '${prayer.data.title}'?`
+        : `'${prayer.data.title}'를 정말로 삭제하시겠습니까?`
     );
 
     if (!confirmDelete) {
@@ -80,7 +87,11 @@ export default function GroupDetailPrayerDetailDelete({
 
   return loading ? (
     <Loading
-      message={`Deleting the group '${group.data.name}'...`}
+      message={
+        lang === "en"
+          ? `Deleting the prayer '${group.data.name}'...`
+          : `'${group.data.name}'을 삭제중입니다...`
+      }
       fullScreen
     />
   ) : (
@@ -91,15 +102,15 @@ export default function GroupDetailPrayerDetailDelete({
         </p>
       )}
       <BinaryActionScreen
-        title={`Wants to delete the prayer?`}
+        title={$data.titles.head[lang]}
         description={prayer.data.title}
         action={{
           positive: {
-            name: "Yes, delete it.",
+            name: $data.buttons.delete[lang],
             onClick: deletePrayer,
           },
           negative: {
-            name: "No, go back.",
+            name: $data.buttons.goBack[lang],
             onClick: goBack,
           },
         }}

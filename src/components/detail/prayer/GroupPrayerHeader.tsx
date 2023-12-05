@@ -2,6 +2,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { HiArrowLeft } from "react-icons/hi";
 import { twMerge } from "tailwind-merge";
+import { $ } from "~/client/utils";
 import { useLanguage, useTheme } from "~/contexts";
 import { Group, GroupProps, Prayer, User } from "~/types";
 
@@ -17,6 +18,7 @@ interface GroupPrayerHeaderProps {
   user: User;
   group: Group;
   prayer: Prayer;
+  writer: User;
 }
 
 const GroupPrayerHeader: React.FC<GroupPrayerHeaderProps> = ({
@@ -24,9 +26,11 @@ const GroupPrayerHeader: React.FC<GroupPrayerHeaderProps> = ({
   user,
   group,
   prayer,
+  writer,
 }) => {
   const { lang, switchLanguage } = useLanguage();
   const { theme: _, switchTheme } = useTheme();
+  const $data = $("pages", "prayerDetail");
   return (
     <>
       <header
@@ -48,9 +52,11 @@ const GroupPrayerHeader: React.FC<GroupPrayerHeaderProps> = ({
             >
               <HiArrowLeft />
             </Link>
-            <h1 className="font-bold text-lg lg:text-xl">Prayer</h1>
+            <h1 className="font-bold text-lg lg:text-xl">
+              {$data.titles.head[lang]}
+            </h1>
           </div>
-          {user._id === group.data.user_responsible && (
+          {writer._id === user._id && (
             <div className="md:flex items-center gap-x-2.5 hidden">
               <Link
                 href={{
@@ -63,7 +69,7 @@ const GroupPrayerHeader: React.FC<GroupPrayerHeaderProps> = ({
                 as={`/groups/${group._id}/prayers/${prayer._id}/edit`}
                 className="w-max text-sm lg:text-base px-2.5 py-1 lg:px-3 lg:py-1 rounded border flex items-center gap-x-1 lg:gap-x-1.5 font-medium border-neutral-600 lg:hover:bg-neutral-900 lg:hover:border-neutral-900 lg:hover:text-white"
               >
-                Edit
+                {$data.buttons.edit[lang]}
               </Link>
               <Link
                 href={{
@@ -76,7 +82,7 @@ const GroupPrayerHeader: React.FC<GroupPrayerHeaderProps> = ({
                 as={`/groups/${group._id}/prayers/${prayer._id}/delete`}
                 className="w-max text-sm lg:text-base px-2.5 py-1 lg:px-3 lg:py-1 rounded border flex items-center gap-x-1 lg:gap-x-1.5 font-medium border-neutral-600 lg:hover:bg-neutral-900 lg:hover:border-neutral-900 lg:hover:text-white"
               >
-                Delete
+                {$data.buttons.delete[lang]}
               </Link>
             </div>
           )}
@@ -122,7 +128,7 @@ const GroupPrayerHeader: React.FC<GroupPrayerHeaderProps> = ({
               </p>
             </div>
           </div>
-          {group.data.user_responsible === user._id && (
+          {writer._id === user._id && (
             <div className="mt-4 flex items-center justify-center gap-x-2.5 md:hidden">
               <Link
                 href={{
@@ -135,7 +141,7 @@ const GroupPrayerHeader: React.FC<GroupPrayerHeaderProps> = ({
                 as={`/groups/${group._id}/prayers/${prayer._id}/edit`}
                 className="w-max text-sm lg:text-base px-2.5 py-1 lg:px-3 lg:py-1.5 rounded border flex items-center gap-x-1 lg:gap-x-1.5 font-medium border-neutral-600 lg:hover:bg-neutral-900 lg:hover:border-neutral-900 lg:hover:text-white"
               >
-                Edit
+                {$data.buttons.edit[lang]}
               </Link>
               <Link
                 href={{
@@ -148,7 +154,7 @@ const GroupPrayerHeader: React.FC<GroupPrayerHeaderProps> = ({
                 as={`/groups/${group._id}/prayers/${prayer._id}/delete`}
                 className="w-max text-sm lg:text-base px-2.5 py-1 lg:px-3 lg:py-1.5 rounded border flex items-center gap-x-1 lg:gap-x-1.5 font-medium border-neutral-600 lg:hover:bg-neutral-900 lg:hover:border-neutral-900 lg:hover:text-white"
               >
-                Delete
+                {$data.buttons.delete[lang]}
               </Link>
             </div>
           )}

@@ -141,7 +141,7 @@ const GroupDetailPrayers: React.FC<GroupDetailPrayers> = ({
                       {$data.buttons.view[lang]}
                     </Link>
                     {/* if user responsible */}
-                    {group.data.user_responsible === user._id && (
+                    {prayer.data.user_responsible === user._id && (
                       <>
                         <Link
                           href={{

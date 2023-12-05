@@ -3,6 +3,8 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { FiInfo } from "react-icons/fi";
 import { HiArrowRight } from "react-icons/hi";
+import { $ } from "~/client/utils";
+import { useLanguage, useTheme } from "~/contexts";
 import { User, Group } from "~/types";
 
 const Loading = dynamic(() =>
@@ -18,6 +20,9 @@ const GroupDetailInvitation: React.FC<GroupdetailInvitationProps> = ({
   group,
   user,
 }) => {
+  const { lang, switchLanguage } = useLanguage();
+  const { theme: _, switchTheme } = useTheme();
+  const $data = $("pages", "groupDetail");
   const router = useRouter();
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -27,7 +32,9 @@ const GroupDetailInvitation: React.FC<GroupdetailInvitationProps> = ({
   async function accept() {
     setError("");
     setLoading(true);
-    setMessage("Accepting the invitation...");
+    setMessage(
+      lang === "en" ? "Accepting the invitation..." : "초대 수락 중 입니다..."
+    );
 
     const response = await fetch("/api/groups/accept", {
       method: "PUT",
@@ -42,7 +49,11 @@ const GroupDetailInvitation: React.FC<GroupdetailInvitationProps> = ({
       return;
     }
 
-    setMessage("Redirecting to the group page...");
+    setMessage(
+      lang === "en"
+        ? "Redirecting to the group page..."
+        : "그룹 페이지로 돌아갑니다..."
+    );
 
     router.reload();
   }
@@ -50,7 +61,7 @@ const GroupDetailInvitation: React.FC<GroupdetailInvitationProps> = ({
   async function decline() {
     setError("");
     setLoading(true);
-    setMessage("Declining the invitation...");
+    setMessage(lang === "en" ? "Declining the invitation..." : "");
 
     const response = await fetch("/api/groups/decline", {
       method: "PUT",
@@ -65,7 +76,11 @@ const GroupDetailInvitation: React.FC<GroupdetailInvitationProps> = ({
       return;
     }
 
-    setMessage("Redirecting to dashboard...");
+    setMessage(
+      lang === "en"
+        ? "Redirecting to the dashboard..."
+        : "기도터 알림판으로 돌아갑니다..."
+    );
 
     await router.push("/dashboard");
   }
@@ -79,7 +94,7 @@ const GroupDetailInvitation: React.FC<GroupdetailInvitationProps> = ({
         <article className="flex flex-col items-center text-center gap-y-2.5 mb-5 lg:mb-6">
           <h2 className="font-medium text-xl lg:text-2xl">
             <span className="text-red-500">*</span>
-            You are invited to
+            {$data.paragraphs.invite[lang]}
           </h2>
           <p className="text-neutral-600 px-4 lg:text-lg leading-[1.67]">
             {group.data.name}
@@ -99,7 +114,7 @@ const GroupDetailInvitation: React.FC<GroupdetailInvitationProps> = ({
             type="button"
             className="w-full flex items-center justify-between gap-x-3.5 lg:gap-x-5 font-medium text-neutral-600 border rounded lg:hover:border-neutral-900 lg:hover:text-neutral-900 px-6 py-3 lg:px-8 lg:py-3.5"
           >
-            <span>Yes, accept the invitation.</span>
+            <span>{$data.buttons.accept[lang]}</span>
             <HiArrowRight />
           </button>
           <button
@@ -108,7 +123,7 @@ const GroupDetailInvitation: React.FC<GroupdetailInvitationProps> = ({
             type="button"
             className="w-full flex items-center justify-between gap-x-3.5 lg:gap-x-5 font-medium text-neutral-600 border rounded lg:hover:border-neutral-900 lg:hover:text-neutral-900 px-6 py-3 lg:px-8 lg:py-3.5"
           >
-            <span>No, decline it and go back.</span>
+            <span>{$data.buttons.decline[lang]}</span>
             <HiArrowRight />
           </button>
         </ul>

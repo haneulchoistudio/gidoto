@@ -2,6 +2,8 @@ import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 import { useState } from "react";
+import { $ } from "~/client/utils";
+import { useLanguage, useTheme } from "~/contexts";
 import { db } from "~/server/mongo";
 import { returns } from "~/server/ssr";
 import { validateDbQueryId } from "~/server/utils";
@@ -24,7 +26,10 @@ export default function GroupDetailPrayerDetail({
   prayer,
   writer,
 }: Props) {
-  const [theme, _] = useState<GroupProps["theme"]>(group.data.theme);
+  const { lang, switchLanguage } = useLanguage();
+  const { theme: _, switchTheme } = useTheme();
+  const $data = $("pages", "prayerDetail");
+  const [theme, __] = useState<GroupProps["theme"]>(group.data.theme);
 
   return (
     <>
@@ -33,12 +38,13 @@ export default function GroupDetailPrayerDetail({
         user={user}
         group={group}
         prayer={prayer}
+        writer={writer}
       />
       <div className="w-full">
         <section className="px-8 md:px-12 lg:px-16 2xl:px-32 flex flex-col py-8 lg:py-12 max-w-[1080px] mx-auto gap-y-8 lg:gap-y-12">
           <div className="flex flex-col items-start gap-3.5 lg:gap-5">
             <h2 className="font-medium text-xl lg:text-2xl">
-              Shortly, my prayer is.
+              {$data.paragraphs.short[lang]}
             </h2>
             <p className="text-lg lg:text-xl text-neutral-600">
               {prayer.data.short}
@@ -46,7 +52,7 @@ export default function GroupDetailPrayerDetail({
           </div>
           <div className="flex flex-col items-start gap-3.5 lg:gap-5">
             <h2 className="font-medium text-xl lg:text-2xl">
-              To explain in detail,
+              &apos;{prayer.data.title}&apos; {$data.paragraphs.long[lang]}
             </h2>
             <p className="text-lg lg:text-xl text-neutral-600 leading-[1.67] lg:leading-[1.67]">
               {prayer.data.long}

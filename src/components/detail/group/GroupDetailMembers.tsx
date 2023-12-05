@@ -62,7 +62,11 @@ const GroupDetailMembers: React.FC<GroupDetailMembersProps> = ({
         _id: group._id,
         email,
         name: group.data.name,
-        message: `We invite you to join our ${group.data.name} at Gidoto. Let's pray together.`,
+        message:
+          lang === "en"
+            ? `We invite you to join our ${group.data.name} at Gidoto. Let's share our prayers and pray for each other.`
+            : `기도터의 ${group.data.name} 그룹으로 당신을 초대합니다. 기도제목을 공유하고 서로를 위해 기도해요!`,
+        lang,
       }),
     });
 
@@ -83,21 +87,33 @@ const GroupDetailMembers: React.FC<GroupDetailMembersProps> = ({
     if (email) {
       const asUser = user.data.email === email;
       if (asUser) {
-        setError(`You cannot invite yourself.`);
+        setError(
+          lang === "en"
+            ? `You cannot invite yourself.`
+            : "본인을 초대 할 수 없습니다."
+        );
         return;
       } else {
         setError("");
       }
       const asInvited = emails.find((each) => each === email);
       if (asInvited) {
-        setError(`${asInvited} is already invited.`);
+        setError(
+          lang === "en"
+            ? `${asInvited} is already invited.`
+            : `${asInvited}는 이미 초대 되어 있습니다.`
+        );
         return;
       } else {
         setError("");
       }
       const asMember = members.find((member) => member.email === email);
       if (asMember) {
-        setError(`'${asMember.email}' already exists in the list.`);
+        setError(
+          lang === "en"
+            ? `'${asMember.email}' already exists in the list.`
+            : `${asMember.email}은 이미 그룹 멤버입니다.`
+        );
         return;
       } else {
         setError("");
@@ -149,7 +165,26 @@ const GroupDetailMembers: React.FC<GroupDetailMembersProps> = ({
       {openInvite && (
         <div className="relative w-full">
           {loading ? (
-            <Loading message={"Inviting..."} fullScreen={false} />
+            <div
+              className={twMerge(
+                "text-center flex flex-col items-center gap-y-2.5 lg:gap-y-3.5 h-auto",
+                _ === "dark" ? "bg-neutral-900" : "bg-white"
+              )}
+            >
+              <article className="flex justify-center items-center ">
+                <span className="w-[42.5px] lg:w-[47.5px] h-[42.5px] lg:h-[47.5px] rounded-full flex justify-center items-center bg-gradient-to-tr from-blue-500 to-sky-500 animate-spin ">
+                  <span
+                    className={twMerge(
+                      "w-[40.5px] lg:w-[45px] h-[40.5px] lg:h-[45px] rounded-full block ring ring-blue-500/50",
+                      _ === "dark" ? "bg-neutral-900" : "bg-white "
+                    )}
+                  />
+                </span>
+              </article>
+              <p className="px-8 text-center truncate text-blue-500/75 font-light lg:text-lg animate-pulse">
+                {lang === "en" ? `Inviting...` : "초대 중 입니다..."}
+              </p>
+            </div>
           ) : (
             <input
               value={email}

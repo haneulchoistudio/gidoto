@@ -101,9 +101,7 @@ export default function GroupsCreate({ user }: Props) {
   return loading ? (
     <Loading
       message={
-        lang === "en"
-          ? "Creating the group..."
-          : "기토 팀을 만드는 중 입니다..."
+        lang === "en" ? "Creating the group..." : "그룹을 생성 중 입니다..."
       }
       fullScreen
     />
