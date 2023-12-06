@@ -4,12 +4,15 @@ import { useRouter } from "next/router";
 import { FiPlus } from "react-icons/fi";
 import { HiArrowRight } from "react-icons/hi";
 import { twMerge } from "tailwind-merge";
-import { $ } from "~/client/utils";
+import { $, url } from "~/client/utils";
 import { useLanguage, useTheme } from "~/contexts";
 import { Group, GroupProps, Prayer, User } from "~/types";
 
 const Profile = dynamic(() =>
   import("~/components/user").then((component) => component.Profile)
+);
+const GroupPrayerCard = dynamic(() =>
+  import("~/components/detail").then((component) => component.GroupPrayerCard)
 );
 
 interface GroupDetailPrayers {
@@ -68,111 +71,77 @@ const GroupDetailPrayers: React.FC<GroupDetailPrayers> = ({
           {prayers.map(
             (prayer, idx) =>
               prayer && (
-                <div
+                <GroupPrayerCard
                   key={idx}
-                  className={twMerge(
-                    "py-6 rounded border border-transparent transition-all duration-[0.375s] ease-in-out cursor-pointer",
-                    theme === "default:default" &&
-                      "lg:hover:border-neutral-900/25 lg:hover:bg-neutral-900/10 lg:hover:px-6",
-                    theme === "adom:red" &&
-                      "lg:hover:border-red-400/25 lg:hover:bg-red-400/10 lg:hover:px-6",
-                    theme === "tsahov:yellow" &&
-                      "lg:hover:border-amber-500/25 lg:hover:bg-amber-500/10 lg:hover:px-6",
-                    theme === "kahol:blue" &&
-                      "lg:hover:border-blue-500/25 lg:hover:bg-blue-500/10 lg:hover:px-6"
-                  )}
-                >
-                  <div className="mb-2.5">
-                    <Profile
-                      image={
-                        prayer.data.anonymous ? "/pray.png" : user.data.image
-                      }
-                      asModal={false}
-                    />
-                    <p className="text-sm opacity-60 mt-1">
-                      {prayer.data.anonymous
-                        ? lang === "en"
-                          ? "Unknown Member"
-                          : "미공개 멤버"
-                        : user.data.name}
-                    </p>
-                  </div>
-                  <div className="flex justify-between items-center gap-x-4 mb-0.5 lg:mb-1">
-                    <h3 className="font-medium text-lg lg:text-xl">
-                      {prayer.data.title}
-                    </h3>
-                  </div>
-                  <div>
-                    <p className="opacity-60 text-sm lg:text-base">
-                      {prayer.data.short}
-                    </p>
-                  </div>
-                  {/* if tags */}
-                  <div className="mt-2.5 lg:mt-4">
-                    <ul className="flex items-center flex-wrap gap-2.5">
-                      {prayer.data.tags.map((tag, idx) => (
-                        <span
-                          key={idx}
-                          className={twMerge(
-                            "inline-block text-sm font-light transform lg:hover:scale-125 lg:hover:underline transition-all duration-[0.375s] ease-in-out cursor-pointer",
-                            theme === "default:default" && "text-neutral-900",
-                            theme === "adom:red" && "text-red-400",
-                            theme === "tsahov:yellow" && "text-amber-500",
-                            theme === "kahol:blue" && "text-blue-500"
-                          )}
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="flex justify-start gap-x-2.5 items-center">
-                    <Link
-                      href={{
-                        pathname: `/groups/${group._id}/prayers/${prayer._id}`,
-                        query: {
-                          _id: group._id as string,
-                          _id_prayer: prayer._id as string,
-                        },
-                      }}
-                      as={`/groups/${group._id}/prayers/${prayer._id}`}
-                      className="font-medium lg:text-neutral-400 lg:hover:text-neutral-900 text-neutral-600"
-                    >
-                      {$data.buttons.view[lang]}
-                    </Link>
-                    {/* if user responsible */}
-                    {prayer.data.user_responsible === user._id && (
-                      <>
-                        <Link
-                          href={{
-                            pathname: `/groups/${group._id}/prayers/${prayer._id}/edit`,
-                            query: {
-                              _id: group._id as string,
-                              _id_prayer: prayer._id as string,
-                            },
-                          }}
-                          as={`/groups/${group._id}/prayers/${prayer._id}/edit`}
-                          className="font-medium lg:text-blue-400 lg:group-hover:text-blue-500 text-blue-500 lg:group-hover:hover:text-blue-300"
-                        >
-                          {$data.buttons.edit[lang]}
-                        </Link>
-                        <Link
-                          href={{
-                            pathname: `/groups/${group._id}/prayers/${prayer._id}/delete`,
-                            query: {
-                              _id: group._id as string,
-                              _id_prayer: prayer._id as string,
-                            },
-                          }}
-                          as={`/groups/${group._id}/prayers/${prayer._id}/delete`}
-                          className="font-medium lg:text-red-400 lg:group-hover:text-red-500 text-red-500 lg:group-hover:hover:text-red-300"
-                        >
-                          {$data.buttons.delete[lang]}
-                        </Link>
-                      </>
-                    )}
-                  </div>
-                </div>
+                  title={prayer.data.title}
+                  short={prayer.data.short}
+                  isAnonymous={prayer.data.anonymous}
+                  tags={prayer.data.tags}
+                  isWriter={prayer.data.user_responsible === user._id}
+                  writerName={prayer.data.user_name ?? ""}
+                  writerImage={prayer.data.user_image}
+                  links={{
+                    view: {
+                      pathanme: url(
+                        "groups",
+                        group._id as string,
+                        "prayers",
+                        prayer._id as string
+                      ),
+                      query: {
+                        _id: group._id as string,
+                        _id_prayer: prayer._id as string,
+                      },
+                      as: url(
+                        "groups",
+                        group._id as string,
+                        "prayers",
+                        prayer._id as string
+                      ),
+                    },
+                    edit: {
+                      pathanme: url(
+                        "groups",
+                        group._id as string,
+                        "prayers",
+                        prayer._id as string,
+                        "edit"
+                      ),
+                      query: {
+                        _id: group._id as string,
+                        _id_prayer: prayer._id as string,
+                      },
+                      as: url(
+                        "groups",
+                        group._id as string,
+                        "prayers",
+                        prayer._id as string,
+                        "edit"
+                      ),
+                    },
+                    delete: {
+                      pathanme: url(
+                        "groups",
+                        group._id as string,
+                        "prayers",
+                        prayer._id as string,
+                        "delete"
+                      ),
+                      query: {
+                        _id: group._id as string,
+                        _id_prayer: prayer._id as string,
+                      },
+                      as: url(
+                        "groups",
+                        group._id as string,
+                        "prayers",
+                        prayer._id as string,
+                        "delete"
+                      ),
+                    },
+                  }}
+                  groupTheme={group.data.theme}
+                />
               )
           )}
         </ul>

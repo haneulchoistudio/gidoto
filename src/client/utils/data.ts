@@ -295,8 +295,8 @@ function $<Key extends string[]>(...key: Key) {
         },
         buttons: {
           view: {
-            en: "View",
-            ko: "보기",
+            en: "Read prayer",
+            ko: "기도제목 읽기",
           },
           edit: {
             en: "Edit",
@@ -432,6 +432,10 @@ function $<Key extends string[]>(...key: Key) {
           anonymous: {
             en: "I will make this an anonymous prayer.",
             ko: "익명으로 기도제목을 올리겠습니다.",
+          },
+          completed: {
+            en: "This prayer has been responded.",
+            ko: "이 기도제목을 이뤄주셨습니다.",
           },
         },
       },

@@ -34,6 +34,8 @@ export default function GroupsCreate({ user, group }: Props) {
 
   const [p, setP] = useState<PrayerProps>({
     user_responsible: user._id as string,
+    user_image: user.data.image,
+    user_name: user.data.name,
     group_responsible: group._id as string,
     anonymous: false,
     prayer_status: "incomplete",

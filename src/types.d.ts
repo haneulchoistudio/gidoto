@@ -58,6 +58,8 @@ export interface PrayerProps {
 
   group_responsible: string;
   user_responsible: string;
+  user_name: string;
+  user_image: string;
   prayer_status: "incomplete" | "completed";
   anonymous: boolean;
 }

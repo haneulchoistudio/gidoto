@@ -113,6 +113,7 @@ export default function GroupDetailPrayerDetailEdit({
       o.title !== n.title,
       o.short !== n.short,
       o.long !== n.long,
+      o.prayer_status !== n.prayer_status,
     ].some(Boolean);
     setDiff(different);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -206,6 +207,47 @@ export default function GroupDetailPrayerDetailEdit({
               className="px-4 py-3 rounded text-neutral-600 focus:text-neutral-900 placeholder:text-neutral-400"
               placeholder={$data.placeholders.long[lang]}
             />
+          </section>
+          <section className="flex flex-col gap-y-2.5 lg:gap-y-3.5">
+            <div className="flex justify-between items-center">
+              <p
+                className={twMerge(
+                  "text-sm font-mono lg:text-base",
+                  n.prayer_status === "completed"
+                    ? "text-green-500"
+                    : "text-neutral-400"
+                )}
+              >
+                {$data.paragraphs.completed[lang]}
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  setN((p) => ({
+                    ...p,
+                    prayer_status:
+                      n.prayer_status === "completed"
+                        ? "incomplete"
+                        : "completed",
+                  }));
+                }}
+                className={twMerge(
+                  "relative overflow-hidden w-[22.5px] h-[22.5px] lg:w-[25px] lg:h-[25px] rounded-full border flex justify-center items-center group ring",
+                  n.prayer_status === "completed"
+                    ? "border-transparent ring-green-500"
+                    : "lg:hover:border-blue-500 ring-transparent"
+                )}
+              >
+                <FiCheck
+                  className={twMerge(
+                    "transition-all duration-[0.375s] ease-in-out",
+                    n.prayer_status === "completed"
+                      ? "text-green-500 scale-100"
+                      : "scale-0 text-neutral-400"
+                  )}
+                />
+              </button>
+            </div>
           </section>
           {diff && (
             <section>
