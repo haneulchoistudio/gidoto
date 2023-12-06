@@ -21,7 +21,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ isOnFreePlan }) => {
   const profileMenuLinks: LinkProps[] = [
     {
       href: "/dashboard",
-      label: d_language.lang === "en" ? "Dashboard" : "기도터 알림판",
+      label: d_language.lang === "en" ? "Dashboard" : "온어스 알림판",
     },
     {
       href: "/account/profile",

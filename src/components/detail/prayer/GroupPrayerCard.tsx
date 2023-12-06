@@ -111,7 +111,7 @@ const GroupPrayerCard: React.FC<GroupPrayerCardProps> = ({
                 query: links.edit.query,
               }}
               as={links.edit.as}
-              className="text-base lg:text-lg text-neutral-600 lg:hover:text-neutral-400"
+              className="text-base font-medium lg:text-lg text-neutral-600 lg:hover:text-neutral-400"
             >
               {$data.buttons.edit[lang]}
             </Link>
@@ -122,7 +122,7 @@ const GroupPrayerCard: React.FC<GroupPrayerCardProps> = ({
                 query: links.delete.query,
               }}
               as={links.delete.as}
-              className="text-base lg:text-lg text-red-500 lg:hover:opacity-60"
+              className="text-base font-medium lg:text-lg text-red-500 lg:hover:opacity-60"
             >
               {$data.buttons.delete[lang]}
             </Link>

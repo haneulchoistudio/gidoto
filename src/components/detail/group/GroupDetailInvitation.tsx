@@ -78,8 +78,8 @@ const GroupDetailInvitation: React.FC<GroupdetailInvitationProps> = ({
 
     setMessage(
       lang === "en"
-        ? "Redirecting to the dashboard..."
-        : "기도터 알림판으로 돌아갑니다..."
+        ? "Redirecting to the Onus dashboard..."
+        : "온어스 알림판으로 돌아갑니다..."
     );
 
     await router.push("/dashboard");

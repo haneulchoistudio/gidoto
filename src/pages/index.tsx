@@ -121,7 +121,7 @@ export default function Home({ user }: Props) {
             href={"/about"}
             className="opacity-60 font-medium uppercase tracking-[0.075rem] text-sm flex items-center gap-x-2 group lg:hover:overflow-hidden lg:hover:underline"
           >
-            <span>{d_language.lang === "en" ? "About Us" : "기도터란?"}</span>
+            <span>{d_language.lang === "en" ? "About Onus" : "온어스란?"}</span>
             <HiArrowLeft className="text-base lg:text-lg transition-all duration-[0.275s] ease-in-out lg:group-hover:translate-x-full -right-full lg:group-hover:-mr-5 lg:group-hover:scale-125 lg:group-hover:rotate-180" />
           </Link>
         </nav>
@@ -136,7 +136,7 @@ export default function Home({ user }: Props) {
       >
         <article className="flex flex-col gap-y-1.5 lg:gap-y-2.5 items-center text-center pb-5 lg:pb-8 border-b border-neutral-400/40 mb-5 lg:mb-8 w-full">
           <h1 className="font-medium text-4xl lg:text-5xl 2xl:text-6xl">
-            {d_language.lang === "en" ? "Gidoto" : "기도터"}
+            {d_language.lang === "en" ? "Onus" : "온어스"}
           </h1>
           <p className="text-neutral-600">
             {d_language.lang === "en"

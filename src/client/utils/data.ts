@@ -4,8 +4,8 @@ function $<Key extends string[]>(...key: Key) {
       dashboard: {
         titles: {
           head: {
-            en: "Dashboard",
-            ko: `기도터 알림판`,
+            en: "Onus Dashboard",
+            ko: `온어스 알림판`,
           },
           containers: {
             groupList: {

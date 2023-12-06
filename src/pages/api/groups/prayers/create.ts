@@ -78,7 +78,7 @@ export default async function handler(
           replyTo: getEmailUser(),
           to: member.data.email,
           subject: [
-            member.data.preferred_language === "en" ? `[Gidoto]` : `[기도터]`,
+            member.data.preferred_language === "en" ? `[Onus]` : `[온어스]`,
             member.data.preferred_language === "en"
               ? `New prayer has been shared`
               : `나의 그룹 ${group.data.name}에`,
@@ -95,8 +95,8 @@ export default async function handler(
               <h2 style="margin-bottom: 20px;">
                   ${
                     member.data.preferred_language === "en"
-                      ? "Group Prayer Notification - Gidoto"
-                      : "새로운 기도제목 공유 알림 - 기도터"
+                      ? "Group Prayer Notification from Onus"
+                      : "온어스의 새로운 기도제목 공유 알림"
                   }
               </h2>
               <div style="margin-bottom: 10px;">
@@ -118,8 +118,8 @@ export default async function handler(
               <p style="font-family: monospace; font-size: 13.5px; color: #666;">
                   ${
                     member.data.preferred_language === "en"
-                      ? `This mail was delivered via the origin site of <a href="${req.headers.origin}" target="_blank">Gidoto team</a>.`
-                      : `이 메일은 기도터의 공식 사이트 <a href="${req.headers.origin}" target="_blank">기도터 팀</a> 으로부터 발송되었습니다 `
+                      ? `This mail was delivered via the origin site of <a href="${req.headers.origin}" target="_blank">Onus team</a>.`
+                      : `이 메일은 공식 사이트 <a href="${req.headers.origin}" target="_blank">온어스 팀</a> 으로부터 발송되었습니다 `
                   }
               </p>
           </div>

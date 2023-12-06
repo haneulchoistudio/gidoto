@@ -64,8 +64,8 @@ const GroupDetailMembers: React.FC<GroupDetailMembersProps> = ({
         name: group.data.name,
         message:
           lang === "en"
-            ? `We invite you to join our ${group.data.name} at Gidoto. Let's share our prayers and pray for each other.`
-            : `기도터의 ${group.data.name} 그룹으로 당신을 초대합니다. 기도제목을 공유하고 서로를 위해 기도해요!`,
+            ? `We invite you to join our ${group.data.name} at Onus. Let's share our prayers and pray for each other.`
+            : `온어스의 ${group.data.name} 그룹으로 당신을 초대합니다. 기도제목을 공유하고 서로를 위해 기도해요!`,
         lang,
       }),
     });

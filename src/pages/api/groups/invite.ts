@@ -37,15 +37,18 @@ export default async function handler(
     from: getEmailUser(),
     replyTo: getEmailUser(),
     to: body.email,
-    subject: `[Gidoto] ${body.name}'s member invites you to join and pray together.`,
+    subject:
+      body.lang === "en"
+        ? `[Onus] ${body.name}'s member invites you to join and pray together.`
+        : `[온어스] ${group.data.name}에서 당신을 초대합니다.`,
     text: body.message,
     html: `
     <div>
         <h2 style="margin-bottom: 20px;">
             ${
               body.lang === "en"
-                ? "Gidoto Group Invitation"
-                : "기도터 그룹 초대장"
+                ? "Ounus' Group Invitation"
+                : "온어스의 그룹 초대장"
             }
         </h2>
         <div style="margin-bottom: 10px;">
@@ -74,8 +77,8 @@ export default async function handler(
         <p style="font-family: monospace; font-size: 13.5px; color: #666;">
         ${
           body.lang === "en"
-            ? `This mail was delivered via the origin site of <a href="${req.headers.origin}" target="_blank">Gidoto team</a>.`
-            : `이 메일은 기도터의 공식 사이트 <a href="${req.headers.origin}" target="_blank">기도터 팀</a> 으로부터 발송되었습니다 `
+            ? `This mail was delivered via the origin site of <a href="${req.headers.origin}" target="_blank">Onus team</a>.`
+            : `이 메일은 공식 사이트 <a href="${req.headers.origin}" target="_blank">온어스 팀</a> 으로부터 발송되었습니다 `
         }
     </p>
     </div>
