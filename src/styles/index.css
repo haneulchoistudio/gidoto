@@ -16,33 +16,3 @@ a,
 button {
   transition: all 0.375s ease-in-out;
 }
-
-:root {
-  /* 1rem === 16px */
-  font-size: 16px;
-
-  --default-h1-size: 2rem; /** 2*16px == 32px */
-  --default-p-size: 1rem; /** 1*16px == 16px */
-  --default-btn-size: 0.5rem; /** 0.5*16px == 8px */
-}
-
-h1.some_head_text {
-  /* 정한 기준 헤드 사이즈에서 1.25 배 올림 */
-  /** 1.25 * 32px (==2rem) */
-  font-size: calc(1.25 * var(--default-h1-size));
-}
-h1.some_other_head_text {
-  /* 정한 기준 헤드 사이즈에서 1.5 배 올림 */
-  /** 1.5 * 32px (==2rem) */
-  font-size: calc(1.5 * var(--default-h1-size));
-}
-p.description {
-  /* 정한 문장 사이즈에서 0.75로 내려 버림 */
-  /** 0.75 * 16px (==1rem) */
-  font-size: calc(0.75 * var(--default-p-size));
-}
-p.general {
-  /* 정한 문장 사이즈 고대로 가져다 씀 === 1rem */
-  /** 16px (==1rem) */
-  font-size: var(--default-p-size);
-}

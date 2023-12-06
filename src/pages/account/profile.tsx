@@ -10,6 +10,7 @@ import { $, txt } from "~/client/utils";
 import { returns } from "~/server/ssr";
 import { UserProps, type User } from "~/types";
 import { useLanguage, useTheme } from "~/contexts";
+import { AccountProfileMeta } from "~/components/meta";
 
 const ProfileButton = dynamic(() =>
   import("~/components/user").then((component) => component.ProfileButton)
@@ -100,6 +101,7 @@ export default function AccountProfile({ user }: Props) {
 
   return (
     <>
+      <AccountProfileMeta user={user} />
       <header
         className={twMerge(
           "px-8 md:px-12 lg:px-16 2xl:px-32 flex justify-between items-center py-4 lg:py-5"

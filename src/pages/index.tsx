@@ -12,6 +12,7 @@ import { returns } from "~/server/ssr";
 import { useLanguage, useTheme } from "~/contexts";
 import { twMerge } from "tailwind-merge";
 import { FiMoon, FiSun } from "react-icons/fi";
+import { LandingMeta } from "~/components/meta";
 
 const Loading = dynamic(() =>
   import("~/components/status").then((component) => component.Loading)
@@ -42,19 +43,23 @@ export default function Home({ user }: Props) {
 
   if (user) {
     return (
-      <Loading
-        fullScreen
-        message={
-          user.data.preferred_language === "en"
-            ? "Redirecting to dashboard..."
-            : "알림판으로 이동중..."
-        }
-      />
+      <>
+        <LandingMeta user={user} />
+        <Loading
+          fullScreen
+          message={
+            user.data.preferred_language === "en"
+              ? "Redirecting to dashboard..."
+              : "알림판으로 이동중..."
+          }
+        />
+      </>
     );
   }
 
   return (
     <>
+      <LandingMeta user={user} />
       <header
         className={twMerge(
           "w-full fixed top-50 z-40 flex justify-end pr-8 md:pr-12 lg:pr-16 2xl:pr-32 py-4 lg:py-5 h-max bg-transparent",

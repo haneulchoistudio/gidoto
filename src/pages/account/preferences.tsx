@@ -11,6 +11,7 @@ import { returns } from "~/server/ssr";
 import { UserProps, type User } from "~/types";
 import { FiArrowDown, FiCheck } from "react-icons/fi";
 import { useLanguage, useTheme } from "~/contexts";
+import { AccountPreferencesMeta } from "~/components/meta";
 
 const ProfileButton = dynamic(() =>
   import("~/components/user").then((component) => component.ProfileButton)
@@ -127,6 +128,7 @@ export default function AccountPreferences({ user }: Props) {
 
   return (
     <>
+      <AccountPreferencesMeta user={user} />
       <header
         className={twMerge(
           "px-8 md:px-12 lg:px-16 2xl:px-32 flex justify-between items-center py-4 lg:py-5"

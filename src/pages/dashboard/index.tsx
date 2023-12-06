@@ -10,6 +10,7 @@ import { len } from "~/server/utils";
 import { Group, GroupProps, User } from "~/types";
 import { useLanguage, useTheme } from "~/contexts";
 import { $ } from "~/client/utils";
+import { DashboardMeta } from "~/components/meta";
 
 const ProfileButton = dynamic(() =>
   import("~/components/user").then((component) => component.ProfileButton)
@@ -33,6 +34,7 @@ export default function Dashboard({ user, groups, notifications }: Props) {
 
   return (
     <>
+      <DashboardMeta user={user} />
       <header className="px-8 md:px-12 lg:px-16 2xl:px-32 flex justify-between items-center py-5 lg:py-6">
         <h1 className="font-bold text-lg lg:text-xl">
           {$data.titles.head[lang]}
