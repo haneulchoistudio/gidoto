@@ -124,7 +124,7 @@ export default function Home({ user }: Props) {
           </div>
           <Link
             href={"/about"}
-            className="opacity-60 font-medium uppercase tracking-[0.075rem] text-sm flex items-center gap-x-2 group lg:hover:overflow-hidden lg:hover:underline"
+            className="opacity-75 font-medium uppercase tracking-[0.075rem] text-sm flex items-center gap-x-2 group lg:hover:overflow-hidden lg:hover:underline"
           >
             <span>{d_language.lang === "en" ? "About Onus" : "온어스란?"}</span>
             <HiArrowLeft className="text-base lg:text-lg transition-all duration-[0.275s] ease-in-out lg:group-hover:translate-x-full -right-full lg:group-hover:-mr-5 lg:group-hover:scale-125 lg:group-hover:rotate-180" />
@@ -143,17 +143,17 @@ export default function Home({ user }: Props) {
           <h1 className="font-medium text-4xl lg:text-5xl 2xl:text-6xl">
             {d_language.lang === "en" ? "Onus" : "온어스"}
           </h1>
-          <p className="text-neutral-600">
+          <p className="opacity-75 text-lg lg:text-xl 2xl:text-2xl font-light">
             {d_language.lang === "en"
-              ? "We relentlessly pray for one another."
-              : "서로를 위해 끈임없이 기도하다."}
+              ? "It's on us. Let's pray for one another."
+              : "서로를 위해 끈임없이 기도합니다."}
           </p>
         </article>
         <ul className="w-full md:max-w-[325px] mx-auto flex flex-col items-center gap-y-3.5 lg:gap-y-5">
           <button
             onClick={() => signIn("google")}
             type="button"
-            className="w-full font-medium flex justify-between items-center gap-x-2.5 px-8 py-3.5 border rounded opacity-60 lg:hover:border-blue-500 lg:hover:text-blue-500 lg:hover:opacity-100"
+            className="w-full font-medium flex justify-between items-center gap-x-2.5 px-8 py-3.5 border rounded opacity-75 lg:hover:border-blue-500 lg:hover:text-blue-500 lg:hover:opacity-100"
           >
             <span>
               {d_language.lang === "en"
@@ -165,7 +165,7 @@ export default function Home({ user }: Props) {
           <button
             onClick={() => signIn("kakao")}
             type="button"
-            className="w-full font-medium flex justify-between items-center gap-x-2.5 px-8 py-3.5 border rounded opacity-60 lg:hover:text-neutral-900 lg:hover:border-amber-400 lg:hover:bg-amber-400 lg:hover:opacity-100"
+            className="w-full font-medium flex justify-between items-center gap-x-2.5 px-8 py-3.5 border rounded opacity-75 lg:hover:text-neutral-900 lg:hover:border-amber-400 lg:hover:bg-amber-400 lg:hover:opacity-100"
           >
             <span>
               {d_language.lang === "en"

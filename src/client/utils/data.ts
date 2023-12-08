@@ -166,11 +166,11 @@ function $<Key extends string[]>(...key: Key) {
           socials: {
             instagram: {
               en: "Paste in your instagram id.",
-              ko: "인스타 계정 링크",
+              ko: "인스타 계정",
             },
             kakaotalk: {
               en: "Paste in your group' group kakao link.",
-              ko: "카카오 그룹 톡 링크",
+              ko: "카카오 오픈 톡 링크",
             },
           },
         },
@@ -231,11 +231,11 @@ function $<Key extends string[]>(...key: Key) {
           socials: {
             instagram: {
               en: "Paste in your instagram id.",
-              ko: "인스타 계정 링크",
+              ko: "인스타 계정",
             },
             kakaotalk: {
               en: "Paste in your group' group kakao link.",
-              ko: "카카오 그룹 톡 링크",
+              ko: "카카오 오픈 톡 링크",
             },
           },
         },

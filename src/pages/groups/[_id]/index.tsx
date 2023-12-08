@@ -105,10 +105,7 @@ export default function GroupDetail({ user, group, members, prayers }: Props) {
               }
               kakaotalk={
                 group.data.accounts.kakaotalk
-                  ? [
-                      "https://instagram.com",
-                      group.data.accounts.instagram,
-                    ].join("/")
+                  ? group.data.accounts.kakaotalk
                   : ""
               }
             />

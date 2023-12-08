@@ -160,9 +160,11 @@ export default function AccountPreferences({ user }: Props) {
             "px-8 md:px-12 lg:px-16 2xl:px-32 flex py-4 lg:py-5 max-w-[1080px] mx-auto items-center gap-x-1 lg:gap-x-1.5 text-neutral-400 text-sm lg:text-base"
           )}
         >
-          <span>Account</span>
+          <span>{lang === "en" ? "Account" : "계정"}</span>
           <span>/</span>
-          <span className="font-medium text-neutral-600">Preferences</span>
+          <span className="font-medium text-neutral-600">
+            {lang === "en" ? "Preferences" : "환경설정"}
+          </span>
         </p>
       </div>
       {loading ? (
@@ -179,9 +181,9 @@ export default function AccountPreferences({ user }: Props) {
                 href={"/account/profile"}
                 className="inline-flex items-enter gap-x-0.5 text-blue-500 lg:hover:underline"
               >
-                <span>Account</span>
+                <span>{lang === "en" ? "Account" : "계정"}</span>
                 <span>/</span>
-                <span>Profile</span>
+                <span>{lang === "en" ? "Profile" : "프로필"}</span>
               </Link>
               {lang === "en" ? "." : " 로 가주세요."}
             </p>
@@ -259,7 +261,16 @@ export default function AccountPreferences({ user }: Props) {
                 </h4>
                 <div className="relative">
                   <button
-                    onClick={() => setOpenDisplayTheme(!openDisplayTheme)}
+                    // disabled={true}
+                    onClick={
+                      // () => setOpenDisplayTheme(!openDisplayTheme)
+                      () =>
+                        alert(
+                          lang === "en"
+                            ? "This featuer is currently not available. Sorry for the inconvenience."
+                            : "이 기능은 아직 지원되지 않습니다. 불편을 끼쳐드려 죄송합니다."
+                        )
+                    }
                     type="button"
                     className={twMerge(
                       "w-full px-4 py-3 rounded border text-neutral-600 flex justify-between items-center ",

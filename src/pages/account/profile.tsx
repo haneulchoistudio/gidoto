@@ -133,9 +133,11 @@ export default function AccountProfile({ user }: Props) {
             "px-8 md:px-12 lg:px-16 2xl:px-32 flex py-4 lg:py-5 max-w-[1080px] mx-auto items-center gap-x-1 lg:gap-x-1.5 text-neutral-400 text-sm lg:text-base"
           )}
         >
-          <span>Account</span>
+          <span>{lang === "en" ? "Account" : "계정"}</span>
           <span>/</span>
-          <span className="font-medium text-neutral-600">Profile</span>
+          <span className="font-medium text-neutral-600">
+            {lang === "en" ? "Profile" : "프로필"}
+          </span>
         </p>
       </div>
       {loading ? (
@@ -152,11 +154,11 @@ export default function AccountProfile({ user }: Props) {
                 href={"/account/preferences"}
                 className="inline-flex items-enter gap-x-0.5 text-blue-500 lg:hover:underline"
               >
-                <span>Account</span>
+                <span>{lang === "en" ? "Account" : "계정"}</span>
                 <span>/</span>
-                <span>Preferences</span>
+                <span>{lang === "en" ? "Preferences" : "환경설정"}</span>
               </Link>
-              {lang === "en" ? "." : " 로 가주세요."}
+              {lang === "en" ? "." : " 으로 가주세요."}
             </p>
             <form
               onSubmit={onSubmit}
