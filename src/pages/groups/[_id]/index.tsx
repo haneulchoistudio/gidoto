@@ -127,10 +127,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const group = (await groupDocs.findOne({ _id })) as Group;
 
   if (
-    !(
-      group.data.members.includes(user._id as string) ||
-      group.data.user_responsible === (user._id as string)
-    )
+    ![
+      group.data.members.includes(user._id as string),
+      group.data.emails.includes(user.data.email),
+    ].some(Boolean)
   ) {
     return redirects("/", false);
   }
