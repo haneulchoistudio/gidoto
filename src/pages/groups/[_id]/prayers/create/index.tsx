@@ -254,7 +254,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const groupDocs = await db("groups");
   const group = (await groupDocs.findOne({ _id })) as Group;
   if (!group) return redirects(`/groups/not-found?_id=${_id}`, false);
-  if (len(group.data.prayers).eq(10)) {
+  if (len(group.data.prayers).eq(4)) {
     const to = appendToPwQ(pathname, "create", "limit");
     return redirects(to, false);
   }
