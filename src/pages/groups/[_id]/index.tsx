@@ -128,6 +128,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   if (
     ![
+      group.data.user_responsible == user._id,
       group.data.members.includes(user._id as string),
       group.data.emails.includes(user.data.email),
     ].some(Boolean)
