@@ -2,6 +2,8 @@ import dynamic from "next/dynamic";
 import { GetServerSideProps } from "next";
 import { returns } from "~/server/ssr";
 import { validateDbQueryId } from "~/server/utils";
+import { useLanguage, useTheme } from "~/contexts";
+import { $ } from "~/client/utils";
 
 const AccessErrorScreen = dynamic(() =>
   import("~/components/status").then((component) => component.AccessErrorScreen)
@@ -10,13 +12,16 @@ const AccessErrorScreen = dynamic(() =>
 type Props = { _id: string };
 
 export default function PrayersCreateLimit({ _id }: Props) {
+  const { lang, switchLanguage } = useLanguage();
+  const { theme: _, switchTheme } = useTheme();
+  const $data = $("pages", "prayerLimit");
   return (
     <AccessErrorScreen
-      title="Group's Prayer Limit Reached"
-      description="Your group is currently on a free plan and cannot create more than 3 prayers at a time."
+      title={$data.titles.head[lang]}
+      description={$data.paragraphs.issue[lang]}
       redirectUrls={[
-        { href: `/groups/${_id}`, name: "Back to the group" },
-        { href: "/dashboard", name: "Back dashboard" },
+        { href: `/groups/${_id}`, name: $data.buttons.goBack[lang] },
+        { href: "/dashboard", name: $data.buttons.goDashboard[lang] },
       ]}
     />
   );

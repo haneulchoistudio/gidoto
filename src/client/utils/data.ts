@@ -485,24 +485,23 @@ function $<Key extends string[]>(...key: Key) {
           },
         },
       },
-    },
-
-    buttons: {
-      edit: {
-        en: "edit",
-        ko: "수정",
-      },
-      delete: {
-        en: "delete",
-        ko: "삭제",
-      },
-      newGroup: {
-        en: "New Group",
-        ko: "새 그룹",
-      },
-      newPrayer: {
-        en: "New Prayer",
-        ko: "새 기도제목",
+      prayerLimit: {
+        titles: {
+          head: {
+            en: "Group's Prayer Limit Reached",
+            ko: "그룹 기도제목 한도 초과",
+          },
+        },
+        paragraphs: {
+          issue: {
+            en: "Your group is currently on a plan that only allows you to create maximum of 4 prayers.",
+            ko: "현재 이용하시는 서비스는 최대 4개의 기도제목까지만 허용됩니다.",
+          },
+        },
+        buttons: {
+          goBack: { en: "Back to the group", ko: "그룹으로 돌아가기" },
+          goDashboard: { en: "Go to dashboard", ko: "알림판으로 가기" },
+        },
       },
     },
   } as const;
