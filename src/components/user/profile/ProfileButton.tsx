@@ -21,7 +21,7 @@ const ProfileButton: React.FC<ProfileButtonProps> = ({
     <div className="relative z-20 flex items-center gap-x-2.5">
       <span className="bg-neutral-50 cursor-pointer lg:hover:bg-neutral-900 transition-all duration-[0.35s] ease-in-out border px-2.5 py-1 rounded-full">
         <span className="font-medium uppercase tracking-[0.075rem] text-xs lg:text-sm text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-amber-400 to-blue-400">
-          {d_language.lang === "en" ? "Beta" : "베타버젼"}
+          {d_language.lang === "en" ? "Test" : "테스트"}
         </span>
       </span>
       <button type="button" onClick={() => setOpenMenu(!openMenu)}>

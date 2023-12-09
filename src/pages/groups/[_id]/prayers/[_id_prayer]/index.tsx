@@ -84,6 +84,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const groupDocs = await db("groups");
   const group = (await groupDocs.findOne({ _id })) as Group;
 
+  if (!group.data.members.includes(user._id as string)) {
+    return redirects("/", false);
+  }
+
   const prayerDocs = await db("prayers");
   const prayer = (await prayerDocs.findOne({ _id: _id_prayer })) as Prayer;
 

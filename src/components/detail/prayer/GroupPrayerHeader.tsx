@@ -108,7 +108,7 @@ const GroupPrayerHeader: React.FC<GroupPrayerHeaderProps> = ({
           )}
         >
           <div className="flex flex-col items-center text-center">
-            <h4 className="text-base lg:text-lg font-light opacity-60">
+            <h4 className="text-base lg:text-lg font-light opacity-60 mb-1 lg:mb-1.5">
               {group.data.name}
             </h4>
             <h3 className="font-medium text-2xl lg:text-4xl mb-1.5 lg:mb-2.5">
@@ -116,7 +116,7 @@ const GroupPrayerHeader: React.FC<GroupPrayerHeaderProps> = ({
             </h3>
             <div className="mb-2.5 flex items-center gap-x-1.5 lg:gap-x-2.5">
               <Profile
-                image={prayer.data.anonymous ? "/pray.png" : user.data.image}
+                image={prayer.data.anonymous ? "/pray.png" : writer.data.image}
                 asModal={false}
               />
               <p className="text-sm lg:text-base opacity-60">

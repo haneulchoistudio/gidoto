@@ -125,6 +125,15 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   if (!user) return redirects("/", false);
   const groupDocs = await db("groups");
   const group = (await groupDocs.findOne({ _id })) as Group;
+
+  if (
+    !(
+      group.data.members.includes(user._id as string) ||
+      group.data.user_responsible === (user._id as string)
+    )
+  ) {
+    return redirects("/", false);
+  }
   let members: any[] = [];
   if (len(group.data.members).geq(1)) {
     const userDocs = await db("users");
